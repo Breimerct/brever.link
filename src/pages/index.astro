@@ -1,12 +1,33 @@
 ---
-import Layout from "../layouts/RootLayout.astro";
+import RootLayout from "@layouts/RootLayout.astro";
+import ShortLinkForm from "@/components/short-link-form/ShortLinkForm";
+import Header from "@/components/header/Header.astro";
+import Footer from "@/components/footer/Footer.astro";
+import { getAllLinks } from "@/services/link.service";
+import LinkCard from "@/components/link-card/LinkCard.astro";
+
+let links = await getAllLinks();
 ---
 
-<Layout>
-  <section
-    class="flex flex-col items-center justify-center h-screen max-w-4xl mx-auto"
-  >
-    <h1 class="text-4xl font-bold">Welcome to bect.link</h1>
-    <p class="mt-4 text-lg">A link shortener for Breimer Correa</p>
-  </section>
-</Layout>
+<RootLayout>
+  <main class="flex flex-col items-center max-w-2xl mx-auto pt-4">
+    <Header />
+
+    <ShortLinkForm client:load />
+
+    <section class="w-full my-8">
+      <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
+      {
+        links.length > 0 && (
+          <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {links.map((link) => (
+              <LinkCard link={link} />
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <Footer />
+  </main>
+</RootLayout>

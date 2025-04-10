@@ -1,5 +1,12 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import("@styles/global.css");
+
+const title = "breto.me";
+const siteUrl = "https://breto.me";
+const description =
+  "A URL shortener that allows you to create short links for your long URLs. It also provides a QR code for each link, making it easy to share and access your links on the go. The service is free and open-source, allowing you to host it yourself if desired.";
+const image = "/og.webp";
 ---
 
 <!doctype html>
@@ -8,34 +15,31 @@ import("@styles/global.css");
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>bect.link</title>
+    <title>
+      {title} - A URL shortener
+    </title>
 
-    <meta property="og:title" content="bect.link" />
-    <meta
-      property="og:description"
-      content="A link shortener for Breimer Correa"
-    />
-    <meta property="og:image" content="/og-image.png" />
-    <meta property="og:url" content="https://bect.link" />
+    <meta property="og:title" content={siteUrl} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:url" content={siteUrl} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="bect.link" />
+    <meta property="og:site_name" content={title} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="bect.link" />
-    <meta
-      name="twitter:description"
-      content="A link shortener for Breimer Correa"
-    />
-    <meta name="twitter:image" content="/og-image.png" />
-    <meta name="twitter:url" content="https://bect.link" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:url" content={siteUrl} />
     <meta name="twitter:site" content="@_dotBRe" />
     <meta name="twitter:creator" content="@_dotBRe" />
-    <meta
-      name="twitter:image:alt"
-      content="A link shortener for Breimer Correa"
-    />
+    <meta name="twitter:image:alt" content={description} />
+
+    <ClientRouter />
   </head>
-  <body>
+  <body
+    class="relative min-h-screen p-4 pb-16 dark:bg-slate-900 dark:text-slate-200"
+  >
     <slot />
   </body>
 </html>
