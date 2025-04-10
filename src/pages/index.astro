@@ -1,10 +1,10 @@
 ---
 import RootLayout from "@layouts/RootLayout.astro";
-import ShortLinkForm from "@/components/short-link-form/ShortLinkForm";
-import Header from "@/components/header/Header.astro";
-import Footer from "@/components/footer/Footer.astro";
+import ShortLinkForm from "@components/short-link-form/ShortLinkForm";
+import Header from "@components/header/Header.astro";
+import Footer from "@components/footer/Footer.astro";
 import { getAllLinks } from "@/services/link.service";
-import LinkList from "@/components/link-list/LinkList.astro";
+import LinkList from "@components/link-list/LinkList.astro";
 
 const links = await getAllLinks();
 ---
