@@ -1,6 +1,10 @@
 import { getLinkBySlug, incrementClickCount } from "@/services/link.service";
 import { defineMiddleware } from "astro:middleware";
 
+export const config = {
+  runtime: "edge",
+};
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const { request, redirect } = context;
   const url = new URL(request.url);
