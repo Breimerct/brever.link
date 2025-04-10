@@ -7,13 +7,13 @@ import react from "@astrojs/react";
 
 import db from "@astrojs/db";
 
-import vercel from "@astrojs/vercel";
+import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
   output: "server",
 
-  adapter: vercel({
+  adapter: netlify({
     edgeMiddleware: true,
   }),
 

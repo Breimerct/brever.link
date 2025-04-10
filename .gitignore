@@ -34,3 +34,6 @@ yarn.lock
 
 # pnpm workspace
 pnpm-workspace.yaml
+
+# adpters
+.netlify
