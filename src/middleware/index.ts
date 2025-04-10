@@ -1,11 +1,11 @@
 import { getLinkBySlug, incrementClickCount } from "@/services/link.service";
-import { defineMiddleware } from "astro:middleware";
+import type { APIContext, MiddlewareNext } from "astro";
 
 export const config = {
   runtime: "edge",
 };
 
-export const onRequest = defineMiddleware(async (context, next) => {
+export async function onRequest(context: APIContext, next: MiddlewareNext) {
   const { request, redirect } = context;
   const url = new URL(request.url);
   const slug = url.pathname.split("/").pop(); // Extract slug from the URL path
@@ -30,4 +30,4 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   return next();
-});
+}
