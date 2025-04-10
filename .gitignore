@@ -37,3 +37,4 @@ pnpm-workspace.yaml
 
 # adpters
 .netlify
+.vercel
