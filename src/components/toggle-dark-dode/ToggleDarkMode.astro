@@ -1,0 +1,87 @@
+---
+import Sun from "@public/icons/sun.svg";
+import Moon from "@public/icons/moon.svg";
+---
+
+<label class="inline-flex items-center mb-5 cursor-pointer" for="dark-toggle">
+  <input id="dark-toggle" type="checkbox" value="" class="hidden peer" />
+
+  <figure
+    id="icon-sun"
+    class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+  >
+    <Sun />
+  </figure>
+
+  <div
+    class="relative w-14 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] peer-checked:after:start-3 after:start-[3px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-500"
+  >
+  </div>
+
+  <figure
+    id="icon-moon"
+    class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+  >
+    <Moon />
+  </figure>
+</label>
+
+<script is:inline>
+  let remove = null;
+  const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
+  const $toggleDarkMode = document.getElementById("dark-toggle");
+  const $sunIcon = document.getElementById("icon-sun");
+  const $moonIcon = document.getElementById("icon-moon");
+  const MOON_CLASS = "!text-green-500";
+  const SUN_CLASS = "!text-green-600";
+  const LOCAL_STORAGE_NAME = "theme";
+  const Theme = {
+    Dark: "dark",
+    Light: "light",
+  };
+
+  const getThemePreference = () => {
+    if (typeof localStorage !== "undefined") {
+      return localStorage.getItem("theme") ?? "system";
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  const updateTheme = () => {
+    if (remove != null) {
+      remove();
+    }
+
+    matchMedia?.addEventListener("change", updateTheme);
+
+    remove = () => {
+      matchMedia.removeEventListener("change", updateTheme);
+    };
+
+    const themePreference = getThemePreference();
+    const isDark =
+      themePreference === "dark" ||
+      (themePreference === "system" && matchMedia.matches);
+
+    $toggleDarkMode.checked = isDark;
+    document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+    $sunIcon?.classList[isDark ? "remove" : "add"](SUN_CLASS);
+    $moonIcon?.classList[isDark ? "add" : "remove"](MOON_CLASS);
+  };
+
+  updateTheme();
+
+  document.addEventListener("astro:after-swap", () => {
+    updateTheme();
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+  });
+
+  $toggleDarkMode?.addEventListener("change", () => {
+    const theme = $toggleDarkMode.checked ? Theme.Dark : Theme.Light;
+    localStorage.setItem(LOCAL_STORAGE_NAME, theme);
+    updateTheme();
+  });
+</script>
