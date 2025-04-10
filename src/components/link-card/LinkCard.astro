@@ -10,6 +10,8 @@ const { link } = Astro.props;
 ---
 
 <li
+  data-short={link.shortLink}
+  id="link-card"
   class={cn(
     "p-4 bg-white rounded-lg shadow-md",
     "col-span-1",
@@ -61,3 +63,16 @@ const { link } = Astro.props;
     </div>
   </div>
 </li>
+
+<script>
+  import { showToast } from "../toaster/Toaster";
+
+  const $cardEl = document.querySelector("#link-card");
+  const $shortLink = $cardEl?.getAttribute("data-short");
+
+  $cardEl?.addEventListener("click", () => {
+    navigator.clipboard.writeText($shortLink!).then(() => {
+      showToast("Link copied to clipboard", "success");
+    });
+  });
+</script>
