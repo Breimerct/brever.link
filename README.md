@@ -16,8 +16,6 @@ This starter kit is designed to help developers quickly build performant and sca
 
 ![Project Preview](./public/app.webp)
 
-> Replace the above image with a screenshot of your project.
-
 ## 🚀 Getting Started
 
 ### Installation
