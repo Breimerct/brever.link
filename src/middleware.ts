@@ -1,10 +1,6 @@
 import type { APIContext, MiddlewareNext } from "astro";
 import { getLinkBySlug, incrementClickCount } from "./services/link.service";
 
-export const config = {
-  runtime: "edge",
-};
-
 export async function onRequest(context: APIContext, next: MiddlewareNext) {
   const { request, redirect } = context;
   const url = new URL(request.url);

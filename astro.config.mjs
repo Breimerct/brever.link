@@ -19,7 +19,5 @@ export default defineConfig({
   },
 
   integrations: [react(), db()],
-  adapter: netlify({
-    edgeMiddleware: true,
-  }),
+  adapter: netlify({}),
 });
