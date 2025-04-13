@@ -25,6 +25,11 @@ export default function LinkCard({ link, className, ...props }: Props) {
       });
   };
 
+  const extractOrigin = (url: string) => {
+    const urlObj = new URL(url);
+    return urlObj.origin;
+  };
+
   return (
     <li
       data-short={link.shortLink}
@@ -61,20 +66,23 @@ export default function LinkCard({ link, className, ...props }: Props) {
           </button>
         </div>
       </div>
-      <a
-        href={link.shortLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover:underline transition-colors duration-200 ease-in-out"
-      >
-        <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
-          <span className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300 text-sm">
-            https://breto-me.vercel.app/
-          </span>
-          <br />
-          <span className="text-blue-500 hover:text-blue-700">{link.slug}</span>
-        </h1>
-      </a>
+      <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
+        <span className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-800 dark:text-gray-300 text-sm">
+          {extractOrigin(link.shortLink)}/
+        </span>
+        <a
+          href={link.shortLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "text-slate-900 dark:text-slate-200 font-semibold",
+            "transition-all duration-200 ease-in-out",
+            "hover:underline",
+          )}
+        >
+          <span className="">{link.slug}</span>
+        </a>
+      </h1>
 
       <div className="flex items-center justify-between gap-2">
         <small>

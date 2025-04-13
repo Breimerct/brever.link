@@ -5,6 +5,7 @@ import {
   verifyIsExistingLinkBySlug,
 } from "./link.service";
 import type { CreateLinkForm } from "@/types/link.type";
+const { BASE_SHORT_URL } = import.meta.env;
 
 export const shorLink = async (
   { url, slug }: CreateLinkForm,
@@ -12,12 +13,8 @@ export const shorLink = async (
 ) => {
   try {
     const originUrl = context.request.headers.get("referer");
-    const refererUrl = new URL(originUrl || "");
-    const origin = import.meta.env.PROD
-      ? refererUrl.origin
-      : import.meta.env.BASE_SHORT_URL;
+    const { origin } = new URL(originUrl || "");
 
-    // Check if the URL already exists
     const existingLinks = await verifyIsExistingLinkBySlug(slug);
 
     if (existingLinks) {
@@ -27,7 +24,6 @@ export const shorLink = async (
       });
     }
 
-    // Insert new link
     const shortLink = `${origin}/${slug}`;
     const {
       data: insertResult,
