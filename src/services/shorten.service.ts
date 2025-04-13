@@ -20,7 +20,7 @@ export const shorLink = async (
       });
     }
 
-    const shortLink = `${origin}/${slug}`;
+    const shortLink = new URL(`${origin}/${slug}`).toString();
 
     const qrCode = await QRCode.toDataURL(shortLink, {
       errorCorrectionLevel: "H",
