@@ -1,5 +1,7 @@
+import "node_modules/sonner/dist/styles.css";
+
 import { createPortal } from "react-dom";
-import { Toaster as SonnerToaster, toast } from "sonner";
+import { Toaster as SonnerToaster } from "sonner";
 
 function Toaster() {
   const Toast = createPortal(
@@ -11,7 +13,3 @@ function Toaster() {
 }
 
 export default Toaster;
-
-export const showToast = (message: string, type: "error" | "success") => {
-  toast[type](message);
-};

@@ -4,7 +4,7 @@ import ShortLinkForm from "@components/short-link-form/ShortLinkForm";
 import Header from "@components/header/Header.astro";
 import Footer from "@components/footer/Footer.astro";
 import { getAllLinks } from "@/services/link.service";
-import LinkList from "@components/link-list/LinkList.astro";
+import LinkList from "@components/link-list/LinkList";
 
 const links = await getAllLinks();
 ---
@@ -18,7 +18,7 @@ const links = await getAllLinks();
     <section class="w-full my-8">
       <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
 
-      <LinkList links={links} />
+      <LinkList links={links} client:only="react" />
     </section>
 
     <Footer />
