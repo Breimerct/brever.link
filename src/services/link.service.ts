@@ -128,7 +128,7 @@ export const getAllLinks = async (): Promise<Link[]> => {
     const links = await db
       .select()
       .from(LinkTable)
-      .orderBy(desc(LinkTable.id))
+      .orderBy(desc(LinkTable.createdAt))
       .execute();
 
     return links;
