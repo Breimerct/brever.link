@@ -2,14 +2,15 @@ import { FormProvider, useForm } from "react-hook-form";
 import Button from "@components/button/Button";
 import Input from "@components/input/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { CreateLinkAction } from "@/types/link.type";
+
 import { actions } from "astro:actions";
-import type { CreateLinkForm } from "@/types/link.type";
-import { shorLinkSchema } from "@/schemas/short-link.schema";
-import { navigate } from "astro:transitions/client";
+import { navigate } from "astro/virtual-modules/transitions-router.js";
+import { shorLinkActionSchema } from "@/schemas/short-link-action.schema";
 
 export default function ShortLinkForm() {
-  const methods = useForm<CreateLinkForm>({
-    resolver: zodResolver(shorLinkSchema),
+  const methods = useForm<CreateLinkAction>({
+    resolver: zodResolver(shorLinkActionSchema),
     mode: "onChange",
   });
 
@@ -70,7 +71,7 @@ export default function ShortLinkForm() {
           </div>
         </div>
 
-        <Button className="mt-4" type="submit" fullWidth>
+        <Button className="mt-2" type="submit" fullWidth>
           short it
         </Button>
       </form>
