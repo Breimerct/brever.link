@@ -3,6 +3,8 @@ import { cn, formatDate, getDomain } from "@/helpers/utils";
 import { type LiHTMLAttributes } from "react";
 import type { Link } from "@/types/link.type";
 import { toast } from "sonner";
+import Button from "../button/Button";
+import IconDownload from "../icons/IconDownload";
 
 interface Props extends LiHTMLAttributes<HTMLLIElement> {
   link: Link;
@@ -23,6 +25,15 @@ export default function LinkCard({ link, className, ...props }: Props) {
         });
         console.error("Failed to copy link:", err);
       });
+  };
+
+  const handleDownloadQrImg = () => {
+    const linkElement = document.createElement("a");
+    linkElement.href = link.qrCode!;
+    linkElement.download = `${link.slug}.png`;
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
   };
 
   const extractOrigin = (url: string) => {
@@ -83,6 +94,26 @@ export default function LinkCard({ link, className, ...props }: Props) {
           <span className="">{link.slug}</span>
         </a>
       </h1>
+
+      {link.qrCode && (
+        <figure className="flex items-center gap-2">
+          <img
+            src={link.qrCode!}
+            alt="QR code"
+            className="w-16 h-16 rounded-md shadow-md"
+          />
+          <figcaption className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="font-semibold">QR Code</span>
+            <Button
+              className="mt-2 !text-sm"
+              appendIcon={<IconDownload />}
+              onClick={handleDownloadQrImg}
+            >
+              Download QR Code
+            </Button>
+          </figcaption>
+        </figure>
+      )}
 
       <div className="flex items-center justify-between gap-2">
         <small>
