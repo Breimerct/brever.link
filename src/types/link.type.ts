@@ -1,9 +1,12 @@
-export type CreateLinkForm = {
+export type CreateLinkAction = {
   url: string;
   slug: string;
 };
 
-export type CreateLink = CreateLinkForm & {
+export type CreateLink = {
+  url: string;
+  slug: string;
+  qrCode?: string | null;
   shortLink: string;
 };
 
