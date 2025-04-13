@@ -1,14 +1,10 @@
 import { ActionError, type ActionAPIContext } from "astro:actions";
-import {
-  createLink,
-  formatLink,
-  verifyIsExistingLinkBySlug,
-} from "./link.service";
-import type { CreateLinkForm } from "@/types/link.type";
-const { BASE_SHORT_URL } = import.meta.env;
+import { createNewLink, verifyIsExistingLinkBySlug } from "./link.service";
+import type { CreateLinkAction } from "@/types/link.type";
+import QRCode from "qrcode";
 
 export const shorLink = async (
-  { url, slug }: CreateLinkForm,
+  { url, slug }: CreateLinkAction,
   context: ActionAPIContext,
 ) => {
   try {
@@ -25,11 +21,19 @@ export const shorLink = async (
     }
 
     const shortLink = `${origin}/${slug}`;
+
+    const qrCode = await QRCode.toDataURL(shortLink, {
+      errorCorrectionLevel: "H",
+      margin: 1,
+      scale: 4,
+      width: 512,
+    });
+
     const {
       data: insertResult,
       success,
       error,
-    } = await createLink({ slug, url, shortLink });
+    } = await createNewLink({ slug, url, shortLink, qrCode });
 
     if (!success || !insertResult) {
       throw new ActionError({
@@ -40,7 +44,7 @@ export const shorLink = async (
 
     return {
       success: true,
-      data: formatLink(insertResult),
+      data: insertResult,
     };
   } catch (error: any) {
     console.error("Error in shortenUrl:", error);

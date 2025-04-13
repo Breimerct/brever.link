@@ -1,5 +1,5 @@
 import type { CreateLink, Link } from "@/types/link.type";
-import { db, eq, LinkTable } from "astro:db";
+import { db, desc, eq, LinkTable } from "astro:db";
 
 export const verifyIsExistingLinkBySlug = async (
   slug: string,
@@ -27,7 +27,7 @@ export const getLinkBySlug = async (slug: string) => {
 
     return {
       success: true,
-      data: formatLink(link),
+      data: link,
       error: null,
     };
   } catch (error) {
@@ -51,7 +51,6 @@ export const incrementClickCount = async (slug: string) => {
       };
     }
 
-    // Increment the click count
     const [updatedLink] = await db
       .update(LinkTable)
       .set({ clickCount: link.clickCount + 1 })
@@ -69,7 +68,7 @@ export const incrementClickCount = async (slug: string) => {
 
     return {
       success: true,
-      data: formatLink(updatedLink),
+      data: updatedLink,
       error: null,
     };
   } catch (error) {
@@ -82,9 +81,13 @@ export const incrementClickCount = async (slug: string) => {
   }
 };
 
-export const createLink = async ({ slug, url, shortLink }: CreateLink) => {
+export const createNewLink = async ({
+  slug,
+  url,
+  shortLink,
+  qrCode,
+}: CreateLink) => {
   try {
-    // Insert new link
     const [insertResult] = await db
       .insert(LinkTable)
       .values({
@@ -92,8 +95,10 @@ export const createLink = async ({ slug, url, shortLink }: CreateLink) => {
         url,
         slug,
         shortLink,
+        qrCode,
+        createdAt: new Date(),
       })
-      .returning(); // Usar returning() para obtener los datos insertados
+      .returning();
 
     if (!insertResult) {
       return {
@@ -106,7 +111,7 @@ export const createLink = async ({ slug, url, shortLink }: CreateLink) => {
     return {
       success: true,
       error: null,
-      data: formatLink(insertResult),
+      data: insertResult,
     };
   } catch (error) {
     console.error("Error in createLink:", error);
@@ -118,25 +123,17 @@ export const createLink = async ({ slug, url, shortLink }: CreateLink) => {
   }
 };
 
-export const formatLink = (link: Link) => {
-  if (!link) return null;
-
-  return {
-    id: link.id,
-    url: link.url,
-    slug: link.slug,
-    shortLink: link.shortLink,
-    clickCount: link.clickCount,
-    createdAt: link.createdAt,
-  };
-};
-
 export const getAllLinks = async (): Promise<Link[]> => {
   try {
-    const links = await db.select().from(LinkTable).execute();
+    const links = await db
+      .select()
+      .from(LinkTable)
+      .orderBy(desc(LinkTable.createdAt))
+      .execute();
+
     return links;
   } catch (error) {
     console.error("Error in getAllLinks:", error);
-    return []; // Return an empty array in case of error
+    return [];
   }
 };

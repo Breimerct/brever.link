@@ -23,5 +23,8 @@ export const LinkTable = defineTable({
     clickCount: column.number({
       default: 0,
     }),
+    qrCode: column.text({
+      optional: true,
+    }),
   },
 });
