@@ -25,11 +25,9 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
   >
     <Header />
 
-    <div
-      class="w-full h-full flex flex-col lg:flex-row lg:gap-8 justify-between"
-    >
+    <div class="w-full flex flex-col lg:flex-row lg:gap-8 justify-between">
       <div
-        class="p-8 w-full max-w-xl mx-auto shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
+        class="p-8 w-full h-full max-w-xl mx-auto shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
       >
         <div class="w-full flex justify-end items-center gap-5">
           <a
@@ -53,11 +51,14 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
             <DarkGitHub class="hidden dark:block size-7" />
           </a>
 
-          <div>
+          <div transition:persist>
             <ToggleDarkMode />
           </div>
         </div>
-        <ShortLinkForm client:load />
+
+        <div>
+          <ShortLinkForm client:load />
+        </div>
       </div>
 
       <section class="w-full my-8 lg:mt-0">
