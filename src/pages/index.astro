@@ -16,7 +16,7 @@ const urlParams = new URL(url).searchParams;
 const page = urlParams.get("page") || 1;
 
 const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
-  await getAllPaginatedLinks(+page, 6);
+  await getAllPaginatedLinks(+page, 4);
 ---
 
 <RootLayout>
