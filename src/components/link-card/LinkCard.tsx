@@ -105,11 +105,12 @@ export default function LinkCard({ link, className, ...props }: Props) {
           <figcaption className="text-sm text-gray-500 dark:text-gray-400">
             <span className="font-semibold">QR Code</span>
             <Button
-              className="mt-2 !text-sm"
+              fullWidth
+              className="mt-2 !text-xs"
               appendIcon={<IconDownload />}
               onClick={handleDownloadQrImg}
             >
-              Download QR Code
+              Download
             </Button>
           </figcaption>
         </figure>

@@ -35,7 +35,7 @@ export default function ShortLinkForm() {
   return (
     <FormProvider {...methods}>
       <form
-        className="p-8 w-full shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
+        className="p-8 w-full max-w-xl mx-auto shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
         onSubmit={handleSubmit}
       >
         <div>

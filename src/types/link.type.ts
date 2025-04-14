@@ -15,3 +15,12 @@ export type Link = CreateLink & {
   createdAt: Date;
   clickCount: number;
 };
+
+export type PaginatedLinks = {
+  links: Link[];
+  totalLinks: number;
+  totalPages: number;
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};

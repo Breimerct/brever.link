@@ -3,23 +3,43 @@ import RootLayout from "@layouts/RootLayout.astro";
 import ShortLinkForm from "@components/short-link-form/ShortLinkForm";
 import Header from "@components/header/Header.astro";
 import Footer from "@components/footer/Footer.astro";
-import { getAllLinks } from "@/services/link.service";
+import { getAllPaginatedLinks } from "@/services/link.service";
 import LinkList from "@components/link-list/LinkList";
+import Pagination from "@/components/pagination/Pagination.astro";
 
-const links = await getAllLinks();
+const url = Astro.request.url;
+const urlParams = new URL(url).searchParams;
+const page = urlParams.get("page") || 1;
+
+const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
+  await getAllPaginatedLinks(+page, 6);
 ---
 
 <RootLayout>
-  <main class="flex flex-col items-center max-w-2xl mx-auto pt-4">
+  <main
+    class="flex flex-col items-center max-w-2xl md:max-w-[90rem] mx-auto pt-4"
+  >
     <Header />
 
-    <ShortLinkForm client:load />
+    <div
+      class="w-full h-full flex flex-col lg:flex-row lg:gap-2 justify-between"
+    >
+      <div class="w-full">
+        <ShortLinkForm client:load />
+      </div>
 
-    <section class="w-full my-8">
-      <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
+      <section class="w-full my-8 lg:mt-0">
+        <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
 
-      <LinkList links={links} client:only="react" />
-    </section>
+        <LinkList links={links} client:only="react" />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+        />
+      </section>
+    </div>
 
     <Footer />
   </main>

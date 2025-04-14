@@ -1,3 +1,38 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@layer components {
+  .custom-scrollbar {
+    --sb-track-color: #bdbdbd33;
+    --sb-thumb-color: var(--color-slate-900);
+    --sb-size: 8px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .custom-scrollbar {
+      --sb-thumb-color: var(--color-slate-600);
+    }
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: var(--sb-size);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 10px;
+    border: 1px solid var(--sb-track-color);
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .custom-scrollbar {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+}
