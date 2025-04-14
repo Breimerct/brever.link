@@ -6,6 +6,10 @@ import Footer from "@components/footer/Footer.astro";
 import { getAllPaginatedLinks } from "@/services/link.service";
 import LinkList from "@components/link-list/LinkList";
 import Pagination from "@/components/pagination/Pagination.astro";
+import Bmc from "@components/icons/bmc.svg";
+import LightGitHub from "@components/icons/github.svg";
+import DarkGitHub from "@components/icons/github-dark.svg";
+import ToggleDarkMode from "@/components/toggle-dark-dode/ToggleDarkMode.astro";
 
 const url = Astro.request.url;
 const urlParams = new URL(url).searchParams;
@@ -24,7 +28,35 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
     <div
       class="w-full h-full flex flex-col lg:flex-row lg:gap-2 justify-between"
     >
-      <div class="w-full">
+      <div
+        class="p-8 w-full max-w-xl mx-auto shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
+      >
+        <div class="w-full flex justify-end items-center gap-5">
+          <a
+            href="https://buymeacoffee.com/breimercts"
+            class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 dark:text-slate-400 text-sm font-semibold"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Buy me a coffee"
+          >
+            <Bmc class="size-7" />
+          </a>
+
+          <a
+            href="https://github.com/Breimerct/bect.link"
+            class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 dark:text-slate-400 text-sm font-semibold"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub Repository"
+          >
+            <LightGitHub class="size-7 dark:hidden" />
+            <DarkGitHub class="hidden dark:block size-7" />
+          </a>
+
+          <div>
+            <ToggleDarkMode />
+          </div>
+        </div>
         <ShortLinkForm client:load />
       </div>
 
