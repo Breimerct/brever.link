@@ -3,7 +3,10 @@ import Sun from "@components/icons/sun.svg";
 import Moon from "@components/icons/moon.svg";
 ---
 
-<label class="flex items-center cursor-pointer" for="dark-toggle">
+<label
+  class="flex items-center cursor-pointer transition-all hover:scale-110"
+  for="dark-toggle"
+>
   <input id="dark-toggle" type="checkbox" value="" class="hidden peer" />
 
   <figure id="icon-sun" class="text-slate-800 peer-checked:hidden">
