@@ -1,5 +1,5 @@
-import type { CreateLink, Link } from "@/types/link.type";
-import { db, desc, eq, LinkTable } from "astro:db";
+import type { CreateLink, Link, PaginatedLinks } from "@/types/link.type";
+import { count, db, desc, eq, LinkTable } from "astro:db";
 
 export const verifyIsExistingLinkBySlug = async (
   slug: string,
@@ -135,5 +135,46 @@ export const getAllLinks = async (): Promise<Link[]> => {
   } catch (error) {
     console.error("Error in getAllLinks:", error);
     return [];
+  }
+};
+
+export const getAllPaginatedLinks = async (
+  page: number,
+  limit: number,
+): Promise<PaginatedLinks> => {
+  try {
+    const links = await db
+      .select()
+      .from(LinkTable)
+      .orderBy(desc(LinkTable.createdAt))
+      .limit(limit)
+      .offset((page - 1) * limit)
+      .execute();
+
+    const [totalLinks] = await db
+      .select({ count: count() })
+      .from(LinkTable)
+      .execute();
+
+    const totalPages = Math.ceil(totalLinks.count / limit);
+
+    return {
+      links,
+      totalLinks: totalLinks.count,
+      totalPages,
+      currentPage: page,
+      hasNextPage: page < totalPages,
+      hasPreviousPage: page > 1,
+    };
+  } catch (error) {
+    console.error("Error in getAllPaginatedLinks:", error);
+    return {
+      links: [],
+      totalLinks: 0,
+      totalPages: 0,
+      currentPage: page,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    };
   }
 };
