@@ -31,6 +31,17 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
       <section class="w-full my-8 lg:mt-0">
         <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
 
+        {
+          !links.length && (
+            <div class="text-center mt-10">
+              <h4 class="text-slate-500 text-3xl font-bold">
+                No short links found.
+                <br /> Create one above!
+              </h4>
+            </div>
+          )
+        }
+
         <LinkList links={links} client:only="react" />
         <Pagination
           currentPage={currentPage}
