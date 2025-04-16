@@ -1,5 +1,5 @@
 import type { CreateLink, Link, PaginatedLinks } from "@/types/link.type";
-import { count, db, desc, eq, LinkTable } from "astro:db";
+import { count, db, desc, eq, like, LinkTable } from "astro:db";
 
 export const verifyIsExistingLinkBySlug = async (
   slug: string,
@@ -141,11 +141,13 @@ export const getAllLinks = async (): Promise<Link[]> => {
 export const getAllPaginatedLinks = async (
   page: number,
   limit: number,
+  slug: string = "",
 ): Promise<PaginatedLinks> => {
   try {
     const links = await db
       .select()
       .from(LinkTable)
+      .where(like(LinkTable.slug, `%${slug}%`))
       .orderBy(desc(LinkTable.createdAt))
       .limit(limit)
       .offset((page - 1) * limit)
