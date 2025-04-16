@@ -24,3 +24,7 @@ export type PaginatedLinks = {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 };
+
+export type FilterLinks = {
+  search: string;
+};

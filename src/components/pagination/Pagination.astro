@@ -58,6 +58,8 @@ const { currentPage, totalPages, hasPreviousPage, hasNextPage } = Astro.props;
                   "!bg-gray-100 text-gray-700": pageNumber === currentPage,
                   "dark:!bg-gray-700 dark:!text-white":
                     pageNumber === currentPage,
+                  "pointer-events-none cursor-not-allowed":
+                    pageNumber === currentPage,
                 },
               )}
             >
