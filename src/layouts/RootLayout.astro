@@ -5,9 +5,15 @@ import("@styles/global.css");
 
 const title = "brever.link";
 const siteUrl = "https://brever.link";
-const description =
-  "A URL shortener that allows you to create short links for your long URLs. It also provides a QR code for each link, making it easy to share and access your links on the go. The service is free and open-source, allowing you to host it yourself if desired.";
-const image = "/og.webp";
+const ogTitle = "Brever.link | Instantly shorten your links with style";
+const ogDescription =
+  "Brever.link is a fast, secure and minimalist URL shortener. Perfect for social media, marketing and more. Try it for free!";
+const image = `${siteUrl}/images/og-brever.webp`;
+const imageAlt = "Brever.link - URL shortener with analytics and clean design";
+
+const twitterTitle = "Brever.link | Short links, big results";
+const twitterDescription =
+  "Simplify your URLs and share with confidence. Track clicks and optimize your audience.";
 ---
 
 <!doctype html>
@@ -20,21 +26,21 @@ const image = "/og.webp";
       {title} - A URL shortener
     </title>
 
-    <meta property="og:title" content={siteUrl} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={siteUrl} />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={title} />
+
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    <meta name="twitter:url" content={siteUrl} />
     <meta name="twitter:site" content="@_dotBRe" />
-    <meta name="twitter:creator" content="@_dotBRe" />
-    <meta name="twitter:image:alt" content={description} />
+    <meta name="twitter:title" content={twitterTitle} />
+    <meta name="twitter:description" content={twitterDescription} />
+    <meta name="twitter:image" content={image} />
 
     <ClientRouter />
   </head>
