@@ -77,23 +77,23 @@ export default function LinkCard({ link, className, ...props }: Props) {
           </button>
         </div>
       </div>
-      <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
-        <span className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-800 dark:text-gray-300 text-sm">
-          {extractOrigin(link.shortLink)}/
-        </span>
-        <a
-          href={link.shortLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={cn(
-            "text-slate-900 dark:text-slate-200 font-semibold",
-            "transition-all duration-200 ease-in-out",
-            "hover:underline",
-          )}
-        >
-          <span className="">{link.slug}</span>
-        </a>
-      </h1>
+
+      <a
+        href={link.shortLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          "text-slate-900 dark:text-slate-200 font-semibold",
+          "transition-all duration-200 ease-in-out",
+          "hover:underline",
+        )}
+      >
+        <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
+          <span className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-800 dark:text-gray-300 text-sm">
+            {link.shortLink}
+          </span>
+        </h1>
+      </a>
 
       {link.qrCode && (
         <figure className="flex items-center gap-2">
