@@ -12,8 +12,8 @@
     "push:db": "astro db push --remote"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12.6.7",
     "@astrojs/db": "0.17.1",
-    "@astrojs/netlify": "6.5.9",
     "@astrojs/react": "4.3.0",
     "@formkit/tempo": "0.1.2",
     "@hookform/resolvers": "5.0.1",
