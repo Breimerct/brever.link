@@ -6,6 +6,8 @@ export const shortenAction = {
   shortenLink: defineAction({
     accept: "json",
     input: shortLinkActionSchema,
-    handler: shorLink,
+    handler: async (data) => {
+      return await shorLink(data);
+    },
   }),
 };
