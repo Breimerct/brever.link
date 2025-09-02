@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import db from "@astrojs/db";
 
-import netlify from "@astrojs/netlify";
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,5 +18,7 @@ export default defineConfig({
   redirects: {},
 
   integrations: [react(), db()],
-  adapter: netlify({}),
+  adapter: vercel({
+    edgeMiddleware: true,
+  }),
 });
