@@ -1,11 +1,11 @@
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../input/Input.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FilterLinksSchema } from "@/schemas/filter-links.schema.ts";
 import { navigate } from "astro:transitions/client";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 import type { Link } from "@/types/link.type.ts";
+import { FilterLinksSchema } from "@/schemas";
 
 interface Props {
   datalist: Link[];

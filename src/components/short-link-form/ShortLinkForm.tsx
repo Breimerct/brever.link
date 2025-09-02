@@ -6,12 +6,12 @@ import type { CreateLinkAction } from "@/types/link.type";
 
 import { actions } from "astro:actions";
 import { navigate } from "astro/virtual-modules/transitions-router.js";
-import { shorLinkActionSchema } from "@/schemas/short-link-action.schema";
 import { toast } from "sonner";
+import { shortLinkActionSchema } from "@/schemas";
 
 export default function ShortLinkForm() {
   const methods = useForm<CreateLinkAction>({
-    resolver: zodResolver(shorLinkActionSchema),
+    resolver: zodResolver(shortLinkActionSchema),
     mode: "onChange",
   });
 
