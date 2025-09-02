@@ -1,4 +1,9 @@
-# bect.link — URL Shortener with Astro
+# brever.link — URL Shortener
+
+<!-- add image cover -->
+<figure>
+  <img src="public/app.webp" alt="Cover Image">
+</figure>
 
 Application for shortening URLs with QR code generation, click counting, search, and pagination. Built with Astro 5, React, Tailwind CSS 4, and Astro DB, ready to deploy on Netlify.
 
@@ -61,20 +66,20 @@ Main table `LinkTable` (fields):
 
 ## Setup
 
-1) Install dependencies
+1. Install dependencies
 
 ```powershell
 pnpm install
 ```
 
-2) Initialize database (local)
+2. Initialize database (local)
 
 ```powershell
 # Push schema to local DB
 pnpm astro db push
 ```
 
-3) Run in development
+3. Run in development
 
 ```powershell
 pnpm dev
@@ -82,7 +87,7 @@ pnpm dev
 
 The app will open at http://localhost:4321 (Astro's default).
 
-4) Build and preview
+4. Build and preview
 
 ```powershell
 pnpm build
@@ -105,13 +110,13 @@ Notes on remote DB:
 
 ## Shortening and Redirection Flow
 
-1) The form (`ShortLinkForm.tsx`) validates with Zod and sends data to an Astro Action.
-2) The action (`shorten.actions.ts`) uses the `shorLink` handler (`shorten.service.ts`):
-     - Verifies slug duplication.
-     - Generates `shortLink` and `qrCode` (with `qrcode`).
-     - Inserts the record in `LinkTable`.
-3) The `middleware.ts` intercepts `/{slug}` routes:
-     - Looks for the link, increments `clickCount` and redirects (302) to `url`.
+1. The form (`ShortLinkForm.tsx`) validates with Zod and sends data to an Astro Action.
+2. The action (`shorten.actions.ts`) uses the `shorLink` handler (`shorten.service.ts`):
+   - Verifies slug duplication.
+   - Generates `shortLink` and `qrCode` (with `qrcode`).
+   - Inserts the record in `LinkTable`.
+3. The `middleware.ts` intercepts `/{slug}` routes:
+   - Looks for the link, increments `clickCount` and redirects (302) to `url`.
 
 ## Pagination and Search
 
