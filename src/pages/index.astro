@@ -3,7 +3,7 @@ import RootLayout from "@layouts/RootLayout.astro";
 import ShortLinkForm from "@components/short-link-form/ShortLinkForm";
 import Header from "@components/header/Header.astro";
 import Footer from "@components/footer/Footer.astro";
-import { getAllLinks, getAllPaginatedLinks } from "@/services/link.service";
+import { getAllPaginatedLinks } from "@/services/link.service";
 import LinkList from "@components/link-list/LinkList";
 import Pagination from "@/components/pagination/Pagination.astro";
 import FilterLinks from "@components/filter-links/FilterLinks";
@@ -14,10 +14,18 @@ import ToggleDarkMode from "@/components/toggle-dark-dode/ToggleDarkMode.astro";
 
 const url = Astro.request.url;
 const urlParams = new URL(url).searchParams;
-const page = urlParams.get("page") || 1;
+const page = urlParams.get("page") || "0";
 const search = urlParams.get("search") || "";
 
-const linksFilters = await getAllLinks();
+// Check if page is a valid number greater than 0
+const isValidPage = !isNaN(Number(page)) && Number(page) > 0;
+
+if (!isValidPage) {
+  console.log("Redirecting to page 1");
+  const redirectUrl = search ? `/?page=1&search=${search}` : "/?page=1";
+  return Astro.redirect(redirectUrl);
+}
+
 const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
   await getAllPaginatedLinks(+page, 4, search);
 ---
@@ -67,7 +75,7 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
       <section class="w-full my-8 lg:mt-0">
         <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
 
-        <FilterLinks datalist={linksFilters} client:only="react" transition:persist />
+        <FilterLinks client:only="react" transition:persist />
         {
           !links.length && (
             <div class="text-center mt-10">

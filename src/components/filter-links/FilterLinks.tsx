@@ -5,13 +5,8 @@ import { FilterLinksSchema } from "@/schemas/filter-links.schema.ts";
 import { navigate } from "astro:transitions/client";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
-import type { Link } from "@/types/link.type.ts";
 
-interface Props {
-  datalist: Link[];
-}
-
-export default function FilterLinks({ datalist }: Props) {
+export default function FilterLinks() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
   const methods = useForm({
@@ -73,8 +68,6 @@ export default function FilterLinks({ datalist }: Props) {
             label="Slug"
             placeholder="Search by slug"
             autoComplete="off"
-            datalist={datalist}
-            disabled={datalist.length === 0}
           />
         </form>
       </FormProvider>
