@@ -156,6 +156,7 @@ export const getAllPaginatedLinks = async (
     const [totalLinks] = await db
       .select({ count: count() })
       .from(LinkTable)
+      .where(like(LinkTable.slug, `%${slug}%`))
       .execute();
 
     const totalPages = Math.ceil(totalLinks.count / limit);

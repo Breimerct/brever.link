@@ -17,12 +17,11 @@ const urlParams = new URL(url).searchParams;
 const page = urlParams.get("page") || "0";
 const search = urlParams.get("search") || "";
 
-// Check if page is a valid number greater than 0
 const isValidPage = !isNaN(Number(page)) && Number(page) > 0;
 
 if (!isValidPage) {
-  console.log("Redirecting to page 1");
   const redirectUrl = search ? `/?page=1&search=${search}` : "/?page=1";
+
   return Astro.redirect(redirectUrl);
 }
 
@@ -102,3 +101,36 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
     <Footer />
   </main>
 </RootLayout>
+
+<script>
+  const createLoader = () => {
+    const loader = document.createElement('div');
+    loader.id = 'page-loader';
+    loader.classList.add('fixed', 'top-0', 'left-0', 'w-full', 'h-1', 'bg-slate-700', 'z-50', 'dark:bg-slate-500');
+    loader.style.animation = 'loading 1.5s infinite ease-in-out';
+    
+    if (!document.getElementById('loader-style')) {
+      const style = document.createElement('style');
+      style.id = 'loader-style';
+      style.innerHTML = `
+        @keyframes loading {
+          0% { transform: translateX(-100%); }
+          50% { transform: translateX(30%); }
+          100% { transform: translateX(100%); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(loader);
+  };
+
+  const removeLoader = () => {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.remove();
+  };
+
+  document.addEventListener('astro:before-preparation', createLoader);
+  document.addEventListener('astro:page-load', removeLoader);
+  document.addEventListener('astro:after-swap', removeLoader);
+</script>
