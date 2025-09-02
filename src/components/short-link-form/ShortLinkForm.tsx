@@ -7,6 +7,7 @@ import type { CreateLinkAction } from "@/types/link.type";
 import { actions } from "astro:actions";
 import { navigate } from "astro/virtual-modules/transitions-router.js";
 import { shorLinkActionSchema } from "@/schemas/short-link-action.schema";
+import { toast } from "sonner";
 
 export default function ShortLinkForm() {
   const methods = useForm<CreateLinkAction>({
@@ -25,6 +26,9 @@ export default function ShortLinkForm() {
     const response = await actions.shortenAction.shortenLink(data);
 
     if (response.error) {
+      toast.error(response.error.message, {
+        description: "Please check the data and try again.",
+      });
       return;
     }
 

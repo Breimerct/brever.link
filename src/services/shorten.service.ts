@@ -15,7 +15,7 @@ export const shorLink = async (
 
     if (existingLinks) {
       throw new ActionError({
-        message: "Link already exists",
+        message: `Link with slug "${slug}" already exists`,
         code: "CONFLICT",
       });
     }

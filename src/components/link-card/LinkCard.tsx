@@ -36,11 +36,6 @@ export default function LinkCard({ link, className, ...props }: Props) {
     document.body.removeChild(linkElement);
   };
 
-  const extractOrigin = (url: string) => {
-    const urlObj = new URL(url);
-    return urlObj.origin;
-  };
-
   return (
     <li
       data-short={link.shortLink}
@@ -57,7 +52,7 @@ export default function LinkCard({ link, className, ...props }: Props) {
       <div className="flex items-center justify-between gap-2">
         <div>
           <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
-            {getDomain(link.url)}
+            <span>{getDomain(link.url)}</span>
           </h1>
         </div>
 

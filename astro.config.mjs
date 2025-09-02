@@ -15,7 +15,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  experimental: {},
+  redirects: {},
 
   integrations: [react(), db()],
   adapter: netlify({}),
