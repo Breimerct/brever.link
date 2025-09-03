@@ -18,5 +18,7 @@ export default defineConfig({
   redirects: {},
 
   integrations: [react(), db()],
-  adapter: vercel({}),
+  adapter: vercel({
+    edgeMiddleware: true,
+  }),
 });
