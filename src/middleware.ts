@@ -1,7 +1,7 @@
-import type { APIContext, MiddlewareNext } from "astro";
+import { defineMiddleware } from "astro:middleware";
 import { getLinkBySlug, incrementClickCount } from "./services/link.service";
 
-export async function onRequest(context: APIContext, next: MiddlewareNext) {
+export const onRequest = defineMiddleware(async (context, next) => {
   const { request, redirect } = context;
   const url = new URL(request.url);
   const slug = url.pathname.split("/").pop(); // Extract slug from the URL path
@@ -26,4 +26,4 @@ export async function onRequest(context: APIContext, next: MiddlewareNext) {
   }
 
   return next();
-}
+});
