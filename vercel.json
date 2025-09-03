@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "dist/server/entry.mjs": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
