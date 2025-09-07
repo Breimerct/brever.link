@@ -118,7 +118,18 @@ describe("shorLink Service", () => {
     mockContext.request.headers.get.mockReturnValue(null);
     mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);
 
-    // Without referer header, the service should throw an error when trying to create the URL
     await expect(shorLink(inputData, mockContext)).rejects.toThrow();
+  });
+
+  it("throws error for invalid URL", async () => {
+    const inputData = {
+      url: "invalid-url",
+      slug: "test-slug",
+    };
+
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(ActionError);
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(
+      "The URL structure is not valid",
+    );
   });
 });
