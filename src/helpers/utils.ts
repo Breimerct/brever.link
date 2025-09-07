@@ -1,4 +1,5 @@
 import { format } from "@formkit/tempo";
+import { validateUrl } from "./";
 
 type ClassValue =
   | ClassArray
@@ -29,14 +30,11 @@ export function cn(...inputs: ClassValue[]): string {
 
 export function getDomain(url: string): string {
   try {
-    const isValidUrlRegex =
-      /^(?:(?:https?|ftp):\/\/)?((?:[\w-]+\.)+[a-z]{2,}|localhost|(?:\d{1,3}\.){3}\d{1,3})(?::[0-9]{1,5})?(?:\/[^\s]*)?$/i;
+    const { isValid, normalizedUrl, error } = validateUrl(url);
 
-    if (!isValidUrlRegex.test(url)) {
-      throw new Error("Invalid URL format");
-    }
+    if (!isValid) throw new Error(error);
 
-    const { hostname } = new URL(url);
+    const { hostname } = new URL(normalizedUrl!);
     return hostname.replace("www.", "");
   } catch (error) {
     console.error("Invalid URL:", error);

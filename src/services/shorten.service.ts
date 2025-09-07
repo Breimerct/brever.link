@@ -1,12 +1,22 @@
 import { ActionError, type ActionAPIContext } from "astro:actions";
 import { createNewLink, verifyIsExistingLinkBySlug } from "./link.service";
 import type { CreateLinkAction } from "@/types/link.type";
+import { validateUrl } from "@/helpers";
 import QRCode from "qrcode";
 
 export const shorLink = async (
   { url, slug }: CreateLinkAction,
   { request }: ActionAPIContext,
 ) => {
+  const validationResult = validateUrl(url);
+
+  if (!validationResult.isValid) {
+    throw new ActionError({
+      message: validationResult.error || "Invalid URL",
+      code: "BAD_REQUEST",
+    });
+  }
+
   const originUrl = request.headers.get("referer");
   const { origin } = new URL(originUrl || "");
 

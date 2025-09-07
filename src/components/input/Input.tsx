@@ -1,5 +1,5 @@
 import { useId, type FC, type InputHTMLAttributes } from "react";
-import { cn } from "@/helpers/utils";
+import { cn } from "@/helpers";
 import { useFormContext, useFormState } from "react-hook-form";
 import type { Link } from "@/types/link.type";
 

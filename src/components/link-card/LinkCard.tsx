@@ -1,5 +1,5 @@
 import IconCopy from "@components/icons/IconCopy";
-import { cn, formatDate, getDomain } from "@/helpers/utils";
+import { cn, formatDate, getDomain } from "@/helpers";
 import { type LiHTMLAttributes } from "react";
 import type { Link } from "@/types/link.type";
 import { toast } from "sonner";

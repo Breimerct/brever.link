@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/helpers/utils";
+import { cn } from "@/helpers";
 import type { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
