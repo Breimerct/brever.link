@@ -80,4 +80,12 @@ describe("Button Component", () => {
       screen.getByRole("button", { name: /send email/i }),
     ).toBeInTheDocument();
   });
+
+  it("should be loading state", () => {
+    render(<Button isLoading>Loading...</Button>);
+
+    expect(
+      screen.getByRole("button", { name: /loading/i }),
+    ).toBeInTheDocument();
+  });
 });
