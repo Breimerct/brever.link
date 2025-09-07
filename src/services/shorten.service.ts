@@ -28,13 +28,14 @@ export const shorLink = async (
     width: 512,
   });
 
-  const {
-    data: insertResult,
-    success,
-    error,
-  } = await createNewLink({ slug, url, shortLink, qrCode });
+  const { message, success, error } = await createNewLink({
+    slug,
+    url,
+    shortLink,
+    qrCode,
+  });
 
-  if (!success || !insertResult) {
+  if (!success || !message) {
     throw new ActionError({
       message: error || "Failed to create link",
       code: "BAD_REQUEST",
@@ -43,6 +44,6 @@ export const shorLink = async (
 
   return {
     success: true,
-    data: insertResult,
+    message,
   };
 };
