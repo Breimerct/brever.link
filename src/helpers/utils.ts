@@ -29,6 +29,13 @@ export function cn(...inputs: ClassValue[]): string {
 
 export function getDomain(url: string): string {
   try {
+    const isValidUrlRegex =
+      /^(?:(?:https?|ftp):\/\/)?((?:[\w-]+\.)+[a-z]{2,}|localhost|(?:\d{1,3}\.){3}\d{1,3})(?::[0-9]{1,5})?(?:\/[^\s]*)?$/i;
+
+    if (!isValidUrlRegex.test(url)) {
+      throw new Error("Invalid URL format");
+    }
+
     const { hostname } = new URL(url);
     return hostname.replace("www.", "");
   } catch (error) {
