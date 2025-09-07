@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { shorLink } from "../../src/services/shorten.service";
 import { ActionError } from "astro:actions";
@@ -46,16 +47,6 @@ describe("shorLink Service", () => {
     const inputData = {
       url: "https://example.com",
       slug: "test-slug",
-    };
-
-    const mockInsertResult = {
-      id: "generated-id",
-      slug: "test-slug",
-      url: "https://example.com",
-      shortLink: "https://example.com/test-slug",
-      qrCode: "data:image/png;base64,mock-qr-code",
-      clickCount: 0,
-      createdAt: new Date(),
     };
 
     mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);

@@ -8,7 +8,7 @@ type ClassValue =
   | null
   | boolean
   | undefined;
-type ClassDictionary = Record<string, any>;
+type ClassDictionary = Record<string, boolean | undefined>;
 type ClassArray = ClassValue[];
 
 export function cn(...inputs: ClassValue[]): string {
@@ -18,7 +18,7 @@ export function cn(...inputs: ClassValue[]): string {
       if (typeof input === "object" && input !== null) {
         if (Array.isArray(input)) return input;
         return Object.entries(input)
-          .filter(([key, value]) => value)
+          .filter(([_key, value]) => value)
           .map(([key]) => key);
       }
       return [];

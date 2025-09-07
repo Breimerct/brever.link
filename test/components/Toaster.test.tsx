@@ -22,7 +22,7 @@ vi.mock("sonner", () => ({
 
 // Mock de createPortal
 vi.mock("react-dom", () => ({
-  createPortal: (children: React.ReactNode, container: Element) => children,
+  createPortal: (children: React.ReactNode, _container: Element) => children,
 }));
 
 // Importa el componente que quieres testear

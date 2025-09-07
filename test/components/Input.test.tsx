@@ -8,7 +8,7 @@ import type { Link } from "../../src/types/link.type";
 
 // Mock del helper utils
 vi.mock("../../src/helpers/utils", () => ({
-  cn: (...classes: any[]) => {
+  cn: (...classes: (string | undefined | null | boolean | object)[]) => {
     return classes
       .filter(Boolean)
       .map((cls) => (typeof cls === "string" ? cls : ""))
@@ -22,7 +22,7 @@ const FormWrapper = ({
   defaultValues = {},
 }: {
   children: React.ReactNode;
-  defaultValues?: any;
+  defaultValues?: Record<string, unknown>;
 }) => {
   const methods = useForm({ defaultValues });
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 // Mock del módulo astro:db - DEBE estar al inicio antes de cualquier import
@@ -40,7 +41,7 @@ import {
 } from "../../src/services/link.service";
 
 // Imports del mock para usarlos en los tests
-import { db, LinkTable, eq, like, desc, count } from "astro:db";
+import { db, LinkTable, eq, like, desc } from "astro:db";
 
 describe("Link Service", () => {
   beforeEach(() => {

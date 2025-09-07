@@ -26,7 +26,7 @@ export const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 // Helper para crear mocks de funciones con tipos
-export const createMockFn = <T extends (...args: any[]) => any>(
+export const createMockFn = <T extends (...args: unknown[]) => unknown>(
   implementation?: T,
 ): MockedFunction<T> => {
   return vi.fn(implementation) as MockedFunction<T>;

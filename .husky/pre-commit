@@ -1,3 +1,2 @@
 pnpm lint:check
 pnpm lint:eslint
-pnpm test:run

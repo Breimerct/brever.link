@@ -1,8 +1,10 @@
 import { type SVGProps } from "react";
 
-interface Props extends SVGProps<SVGSVGElement> {}
+interface Props extends SVGProps<SVGSVGElement> {
+  className?: string;
+}
 
-const IconCopy: React.FC = (props: Props) => {
+const IconCopy: React.FC<Props> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

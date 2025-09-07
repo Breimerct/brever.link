@@ -26,7 +26,7 @@ if (!isValidPage) {
 }
 
 const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
-  await getAllPaginatedLinks(+page, 4, search)
+  await getAllPaginatedLinks(+page, 4, search);
 ---
 
 <RootLayout>
@@ -77,24 +77,30 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
         <FilterLinks client:only="react" transition:persist />
         {
           !links.length && (
-            <div class="text-center mt-10">
-              <h4 class="text-slate-500 text-3xl font-bold">
-                No short links found.
-                <br /> Create one above!
-              </h4>
-            </div>
+            <>
+              <div class="text-center mt-10">
+                <h4 class="text-slate-500 text-3xl font-bold">
+                  No short links found.
+                  <br /> Create one above!
+                </h4>
+              </div>
+            </>
           )
         }
 
-        {!!links.length && (
-          <LinkList links={links} client:only="react" />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            hasNextPage={hasNextPage}
-            hasPreviousPage={hasPreviousPage}
-          />
-        )}
+        {
+          !!links.length && (
+            <>
+              <LinkList links={links} client:only="react" />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                hasNextPage={hasNextPage}
+                hasPreviousPage={hasPreviousPage}
+              />
+            </>
+          )
+        }
       </section>
     </div>
 
@@ -104,14 +110,23 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
 
 <script>
   const createLoader = () => {
-    const loader = document.createElement('div');
-    loader.id = 'page-loader';
-    loader.classList.add('fixed', 'top-0', 'left-0', 'w-full', 'h-1', 'bg-slate-700', 'z-50', 'dark:bg-slate-500');
-    loader.style.animation = 'loading 1.5s infinite ease-in-out';
-    
-    if (!document.getElementById('loader-style')) {
-      const style = document.createElement('style');
-      style.id = 'loader-style';
+    const loader = document.createElement("div");
+    loader.id = "page-loader";
+    loader.classList.add(
+      "fixed",
+      "top-0",
+      "left-0",
+      "w-full",
+      "h-1",
+      "bg-slate-700",
+      "z-50",
+      "dark:bg-slate-500",
+    );
+    loader.style.animation = "loading 1.5s infinite ease-in-out";
+
+    if (!document.getElementById("loader-style")) {
+      const style = document.createElement("style");
+      style.id = "loader-style";
       style.innerHTML = `
         @keyframes loading {
           0% { transform: translateX(-100%); }
@@ -121,16 +136,16 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
       `;
       document.head.appendChild(style);
     }
-    
+
     document.body.appendChild(loader);
   };
 
   const removeLoader = () => {
-    const loader = document.getElementById('page-loader');
+    const loader = document.getElementById("page-loader");
     if (loader) loader.remove();
   };
 
-  document.addEventListener('astro:before-preparation', createLoader);
-  document.addEventListener('astro:page-load', removeLoader);
-  document.addEventListener('astro:after-swap', removeLoader);
+  document.addEventListener("astro:before-preparation", createLoader);
+  document.addEventListener("astro:page-load", removeLoader);
+  document.addEventListener("astro:after-swap", removeLoader);
 </script>

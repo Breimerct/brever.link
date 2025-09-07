@@ -30,7 +30,7 @@ export const getLinkBySlug = async (slug: string) => {
       data: link,
       error: null,
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
       error: "Failed to retrieve link",

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 // Mock del módulo astro:middleware
 vi.mock("astro:middleware", () => ({
-  defineMiddleware: (fn: Function) => fn,
+  defineMiddleware: (fn: typeof Function) => fn,
 }));
 
 // Mock de los servicios de link - DEBE estar antes de importar el middleware
@@ -76,7 +77,7 @@ describe("Middleware", () => {
     it("should call next() when path is root", async () => {
       mockContext.request = new Request("https://example.com");
 
-      const result = await onRequest(mockContext, mockNext);
+      await onRequest(mockContext, mockNext);
 
       expect(mockNext).toHaveBeenCalled();
       expect(mockGetLinkBySlug).not.toHaveBeenCalled();
@@ -139,7 +140,7 @@ describe("Middleware", () => {
         error: "Link not found",
       });
 
-      const result = await onRequest(mockContext, mockNext);
+      await onRequest(mockContext, mockNext);
 
       expect(mockGetLinkBySlug).toHaveBeenCalledWith("non-existent");
       expect(mockRedirect).toHaveBeenCalledWith("/");
@@ -363,7 +364,7 @@ describe("Middleware", () => {
     it("should handle URL with only slash", async () => {
       mockContext.request = new Request("https://example.com/");
 
-      const result = await onRequest(mockContext, mockNext);
+      await onRequest(mockContext, mockNext);
 
       expect(mockNext).toHaveBeenCalled();
       expect(mockGetLinkBySlug).not.toHaveBeenCalled();

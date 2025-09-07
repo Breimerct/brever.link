@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "../utils";
+import { render, screen, waitFor } from "../utils";
 import userEvent from "@testing-library/user-event";
 
 import ShortLinkForm from "../../src/components/short-link-form/ShortLinkForm";
@@ -402,7 +403,6 @@ describe("ShortLinkForm", () => {
     it("should maintain slug value after validation error", async () => {
       render(<ShortLinkForm />);
 
-      const urlInput = screen.getByTestId("url-input");
       const slugInput = screen.getByTestId("slug-input");
       const submitButton = screen.getByTestId("short-link-form-submit");
 

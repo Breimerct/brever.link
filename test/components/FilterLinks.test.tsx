@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "../utils";
 import userEvent from "@testing-library/user-event";
@@ -8,7 +9,7 @@ vi.mock("astro:transitions/client", () => ({
 }));
 
 vi.mock("@uidotdev/usehooks", () => ({
-  useDebounce: vi.fn((value, delay) => value),
+  useDebounce: vi.fn((value, _delay) => value),
 }));
 
 // Mock react-hook-form
@@ -233,7 +234,7 @@ describe("FilterLinks Component", () => {
   describe("Debounced Search", () => {
     it("should trigger navigation when debounced search changes", async () => {
       let debouncedValue = "";
-      mockUseDebounce.mockImplementation((value) => debouncedValue);
+      mockUseDebounce.mockImplementation((_value) => debouncedValue);
 
       const { rerender } = render(<FilterLinks />);
 
@@ -254,7 +255,7 @@ describe("FilterLinks Component", () => {
       mockLocation.search = "?search=existing&page=2";
 
       let debouncedValue = "";
-      mockUseDebounce.mockImplementation((value) => debouncedValue);
+      mockUseDebounce.mockImplementation((_value) => debouncedValue);
 
       render(<FilterLinks />);
 
@@ -269,7 +270,7 @@ describe("FilterLinks Component", () => {
       mockLocation.search = "?page=5";
 
       let debouncedValue = "new-search";
-      mockUseDebounce.mockImplementation((value) => debouncedValue);
+      mockUseDebounce.mockImplementation((_value) => debouncedValue);
 
       render(<FilterLinks />);
 
@@ -285,7 +286,6 @@ describe("FilterLinks Component", () => {
     it("should preserve existing query parameters", async () => {
       mockLocation.search = "?sort=desc&filter=active";
 
-      // Mock handleSubmit para capturar el valor correcto
       mockHandleSubmit.mockImplementation((fn) => (e: any) => {
         e?.preventDefault?.();
         fn({ search: "test" });
