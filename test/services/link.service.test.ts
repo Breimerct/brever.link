@@ -151,7 +151,7 @@ describe("Link Service", () => {
       const mockLink = {
         id: "1",
         slug: "test-slug",
-        url: "https://example.com",
+        url: "https://github.com",
         shortLink: "brever.link/abc",
         qrCode: "qr-code-data",
         clickCount: 5,
@@ -356,7 +356,7 @@ describe("Link Service", () => {
   describe("createNewLink", () => {
     const mockCreateLink = {
       slug: "test-slug",
-      url: "https://example.com",
+      url: "https://google.com",
       shortLink: "brever.link/abc",
       qrCode: "qr-code-data",
     };

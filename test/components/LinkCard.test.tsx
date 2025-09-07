@@ -21,7 +21,7 @@ import * as sonner from "sonner";
 const mockLink: Link = {
   id: "1",
   slug: "test-slug",
-  url: "https://example.com",
+  url: "https://google.com",
   shortLink: "https://brever.link/test-slug",
   qrCode: "data:image/png;base64,test",
   clickCount: 42,
@@ -53,9 +53,7 @@ describe("LinkCard Component", () => {
       render(<LinkCard link={mockLink} />);
 
       // Domain
-      expect(screen.getByTestId("domain-name")).toHaveTextContent(
-        "example.com",
-      );
+      expect(screen.getByTestId("domain-name")).toHaveTextContent("google.com");
 
       // Click stats
       expect(screen.getByTestId("click-stats")).toHaveTextContent("42");
@@ -314,7 +312,7 @@ describe("LinkCard Component", () => {
     it("should handle long URLs gracefully", () => {
       const linkWithLongUrl = {
         ...mockLink,
-        url: "https://very-long-domain-name-that-should-be-truncated.example.com/very/long/path/that/continues/for/a/while",
+        url: "https://github.com/very/long/path/that/continues/for/a/while",
       };
       render(<LinkCard link={linkWithLongUrl} />);
 

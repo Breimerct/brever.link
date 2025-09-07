@@ -107,6 +107,10 @@ Notes on remote DB:
 - `pnpm astro` — Direct access to Astro CLI.
 - `pnpm lint` — Formats with Prettier.
 - `pnpm push:db` — `astro db push --remote`.
+- `pnpm test` — Runs tests in watch mode.
+- `pnpm test:run` — Runs all tests once.
+- `pnpm test:coverage` — Runs tests with coverage report.
+- `pnpm test:ui` — Opens Vitest web interface.
 
 ## Shortening and Redirection Flow
 
@@ -122,7 +126,33 @@ Notes on remote DB:
 
 - `getAllPaginatedLinks(page, limit, slug)` filters by `slug` match and paginates results. In `index.astro`, `limit = 4` is used and `page` and `search` parameters from the URL are validated.
 
-## Deployment
+## Testing
+
+The project includes comprehensive testing with **242 tests** across **15 test files**:
+
+- **React Components**: Complete UI component testing with user interactions
+- **Business Logic**: Services, middleware, and data operations
+- **Schema Validation**: Zod validation for forms and API actions
+- **URL Security**: Comprehensive URL validation with security checks (HTTPS-only, private IP blocking)
+- **Utilities**: Helper functions and edge case handling
+
+Run tests with:
+
+```powershell
+# Watch mode for development
+pnpm test
+
+# Run all tests once
+pnpm test:run
+
+# Coverage report
+pnpm test:coverage
+
+# Web interface
+pnpm test:ui
+```
+
+For detailed testing documentation, see [TEST_README.md](./TEST_README.md).
 
 - Adapter: `@astrojs/netlify`.
 - Define necessary variables/credentials for your remote DB in Netlify if you use them. Then build and publish with Netlify commands (build: `pnpm build`).
@@ -130,8 +160,9 @@ Notes on remote DB:
 ## Suggested Next Steps
 
 - Implement `db/seed.ts` with example data.
-- Add unit tests to services and schemas.
-- Endpoint/action to delete/edit links if management is required.
+- Add endpoint/action to delete/edit links if management is required.
+- Consider implementing rate limiting for URL shortening.
+- Add analytics dashboard for link performance tracking.
 
 ## License
 

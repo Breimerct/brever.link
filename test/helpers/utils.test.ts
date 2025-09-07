@@ -49,32 +49,44 @@ describe("Utils - cn function", () => {
 
 describe("Utils - getDomain function", () => {
   it("extracts domain from valid URL", () => {
-    expect(getDomain("https://example.com")).toBe("example.com");
+    expect(getDomain("https://brever.link")).toBe("brever.link");
   });
 
   it("removes www prefix", () => {
-    expect(getDomain("https://www.example.com")).toBe("example.com");
+    expect(getDomain("https://www.breimer.dev")).toBe("breimer.dev");
   });
 
   it("handles URLs with paths and query parameters", () => {
-    expect(getDomain("https://www.example.com/path?query=1#fragment")).toBe(
-      "example.com",
+    expect(getDomain("https://www.breimer.dev/path?query=1#fragment")).toBe(
+      "breimer.dev",
     );
   });
 
   it("handles subdomains", () => {
-    expect(getDomain("https://api.example.com")).toBe("api.example.com");
-    expect(getDomain("https://www.api.example.com")).toBe("api.example.com");
+    expect(getDomain("https://api.breimer.dev")).toBe("api.breimer.dev");
+    expect(getDomain("https://www.api.breimer.dev")).toBe("api.breimer.dev");
   });
 
   it("handles different protocols", () => {
-    expect(getDomain("http://example.com")).toBe("example.com");
-    expect(getDomain("ftp://example.com")).toBe("example.com");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    // HTTP and other protocols are not allowed by the new validation
+    expect(getDomain("http://breimer.dev")).toBe("invalid url");
+    expect(getDomain("ftp://breimer.dev")).toBe("invalid url");
+
+    expect(consoleSpy).toHaveBeenCalledTimes(2);
+    consoleSpy.mockRestore();
   });
 
   it("handles ports", () => {
-    expect(getDomain("https://example.com:8080")).toBe("example.com");
-    expect(getDomain("https://www.example.com:3000")).toBe("example.com");
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    // Custom ports are not allowed by the new validation
+    expect(getDomain("https://breimer.dev:8080")).toBe("invalid url");
+    expect(getDomain("https://www.breimer.dev:3000")).toBe("invalid url");
+
+    expect(consoleSpy).toHaveBeenCalledTimes(2);
+    consoleSpy.mockRestore();
   });
 
   it("handles invalid URLs", () => {

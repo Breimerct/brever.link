@@ -39,13 +39,13 @@ describe("shorLink Service", () => {
 
     // Setup default mocks
     mockContext.request.headers.get.mockReturnValue(
-      "https://example.com/some-page",
+      "https://github.com/some-page",
     );
   });
 
   it("creates a new short link successfully", async () => {
     const inputData = {
-      url: "https://example.com",
+      url: "https://github.com",
       slug: "test-slug",
     };
 
@@ -61,8 +61,8 @@ describe("shorLink Service", () => {
     expect(mockVerifyIsExistingLinkBySlug).toHaveBeenCalledWith("test-slug");
     expect(mockCreateNewLink).toHaveBeenCalledWith({
       slug: "test-slug",
-      url: "https://example.com",
-      shortLink: "https://example.com/test-slug",
+      url: "https://github.com",
+      shortLink: "https://github.com/test-slug",
       qrCode: "data:image/png;base64,mock-qr-code",
     });
 
@@ -74,7 +74,7 @@ describe("shorLink Service", () => {
 
   it("throws error when slug already exists", async () => {
     const inputData = {
-      url: "https://example.com",
+      url: "https://stackoverflow.com",
       slug: "existing-slug",
     };
 
@@ -93,7 +93,7 @@ describe("shorLink Service", () => {
 
   it("throws error when createNewLink fails", async () => {
     const inputData = {
-      url: "https://example.com",
+      url: "https://reddit.com",
       slug: "test-slug",
     };
 
@@ -111,7 +111,7 @@ describe("shorLink Service", () => {
 
   it("handles missing referer header gracefully", async () => {
     const inputData = {
-      url: "https://example.com",
+      url: "https://twitter.com",
       slug: "test-slug",
     };
 

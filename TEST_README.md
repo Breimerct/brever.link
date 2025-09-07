@@ -4,9 +4,9 @@ This project uses **Vitest** as the main testing framework, following best pract
 
 ## 📊 General Status
 
-**Current status:** ✅ 213 tests passing across 14 test files
+**Current status:** ✅ 242 tests passing across 15 test files
 
-The project maintains complete test coverage including React components, business services, schema validation, middleware, and utility functions.
+The project maintains complete test coverage including React components, business services, schema validation, middleware, URL validation, and utility functions.
 
 ## 🚀 Testing Environment Configuration
 
@@ -43,6 +43,8 @@ test/
 ├── services/           # Business logic tests
 ├── schemas/            # Zod validation tests
 ├── helpers/            # Utility function tests
+│   ├── utils.test.ts       # General utilities (CSS, dates, domains)
+│   └── validate-url.test.ts # URL validation with security checks
 ├── middleware.test.ts  # Route middleware tests
 ├── setup.ts           # Global configuration
 ├── utils.tsx          # Testing utilities
@@ -55,47 +57,58 @@ test/
 
 Complete coverage of the user interface including:
 
-- Rendering and props
-- User interactions
-- Form validation
-- Accessibility (ARIA, keyboard navigation)
-- Edge cases and error handling
+- **Form Components**: ShortLinkForm (21 tests), FilterLinks (27 tests), Input (19 tests)
+- **Display Components**: LinkCard (20 tests), LinkList (20 tests), Button (8 tests), Toaster (5 tests)
+- **Rendering and props**: Basic rendering, custom props, conditional rendering
+- **User interactions**: Form submission, input handling, button clicks, copy functionality
+- **Form validation**: Real-time validation, error display, field validation
+- **Accessibility**: ARIA labels, keyboard navigation, screen reader support
+- **Edge cases and error handling**: Boundary conditions, error states
 
 #### 🔧 [Business Services](./test/services/)
 
 Testing of the main application logic:
 
-- CRUD operations for links
-- URL shortening logic
-- Pagination and filtering
-- Error handling and edge cases
+- **Link Service** (20 tests): CRUD operations, pagination, validation, error handling
+- **Shorten Service** (4 tests): URL shortening logic, duplicate checking, QR generation
+- Database interaction mocking and error scenarios
+- Pagination and filtering functionality
+- Edge cases and data validation
 
 #### 📊 [Schema Validation](./test/schemas/)
 
-Complete testing of Zod validation:
+Complete testing of Zod validation schemas:
 
-- Form validation
-- Server action validation
-- Filtering schemas
-- Valid and invalid cases
+- **Short Link Action Schema** (13 tests): Server action validation
+- **Short Link Form Schema** (7 tests): Client form validation
+- **Filter Links Schema** (7 tests): Search and filter validation
+- Valid and invalid input cases
+- Type safety and error messages
+- Edge cases and boundary conditions
 
 #### ⚙️ [Utility Functions](./test/helpers/)
 
 Testing of helpers and support functions:
 
-- CSS class manipulation
-- Domain extraction
-- Date formatting
-- Auxiliary functions
+- **Utils Functions** (18 tests): CSS classes, domain extraction, date formatting
+- **URL Validation** (29 tests): Comprehensive URL validation with security checks
+  - HTTPS protocol enforcement
+  - Private IP and localhost blocking
+  - Port validation and security
+  - International domain support
+  - Malformed URL handling
+- Input sanitization and edge cases
 
 #### 🔗 [Middleware](./test/middleware.test.ts)
 
-Testing of routing middleware:
+Testing of routing middleware (24 tests):
 
-- URL slug extraction
-- Link redirection
-- Click counter increment
-- Handling of malformed URLs
+- URL slug extraction and parsing
+- Link redirection and click counting
+- Error handling for missing links
+- URL encoding and special characters
+- HTTP method handling (GET, POST, HEAD)
+- Malformed URL graceful handling
 
 ## 📝 Available Commands
 
@@ -202,7 +215,40 @@ Each test file follows a consistent structure:
 - Setup of user events with `userEvent.setup()`
 - Proper handling of asynchronous operations with `waitFor()`
 
-## 🔧 Integration with Development
+## � URL Validation Testing
+
+### Security-First Approach
+
+The URL validation system (`src/helpers/validate-url.ts`) implements comprehensive security checks tested through 29 dedicated tests:
+
+#### Valid URL Requirements
+
+- **HTTPS Only**: Only HTTPS protocol is accepted for security
+- **Real Domains**: Public, accessible domain names only
+- **Standard Ports**: Port 443 or default (no custom ports allowed)
+- **International Support**: Punycode and international domains supported
+
+#### Security Restrictions
+
+- **No Local URLs**: Blocks localhost, 127.0.0.1, \*.local domains
+- **No Private IPs**: Prevents private network access (10.x.x.x, 192.168.x.x, etc.)
+- **No Example Domains**: Rejects example.com, test.com, and similar
+- **Input Sanitization**: Validates input types and handles edge cases
+
+#### Test Coverage
+
+```typescript
+✓ Valid URLs (5 tests)          - HTTPS, paths, query params, normalization
+✓ Invalid Protocol (3 tests)    - HTTP, FTP, other protocols rejected
+✓ Invalid Hostnames (5 tests)   - Local, private, example domains blocked
+✓ Invalid Ports (3 tests)       - Custom ports rejected, 443 allowed
+✓ Private IP Addresses (1 test) - All private IP ranges blocked
+✓ Invalid Input (5 tests)       - Type validation, empty strings
+✓ Malformed URLs (3 tests)      - Structure validation
+✓ Edge Cases (4 tests)          - International domains, long URLs, fragments
+```
+
+This validation ensures that only legitimate, public HTTPS URLs can be shortened, preventing potential security vulnerabilities and abuse.
 
 ### Recommended VS Code Extensions
 
@@ -270,12 +316,21 @@ pnpm test --reporter=verbose --run
 
 ### Current Test Distribution
 
-- **React Components:** 48% (102 tests)
-- **Middleware:** 11% (24 tests)
-- **Schemas:** 13% (27 tests)
-- **Services:** 11% (24 tests)
-- **Utilities:** 8% (18 tests)
-- **Infrastructure:** 9% (18 tests)
+- **React Components:** 42% (100 tests) - UI components and user interactions
+- **URL Validation:** 12% (29 tests) - Security-focused URL validation
+- **Middleware:** 10% (24 tests) - Routing and redirection logic
+- **Schemas:** 11% (27 tests) - Data validation and type safety
+- **Services:** 10% (24 tests) - Business logic and database operations
+- **Utilities:** 7% (18 tests) - Helper functions and tools
+- **Infrastructure:** 8% (20 tests) - Supporting components and mocks
+
+### Test Coverage by Category
+
+- **Security**: URL validation with HTTPS enforcement, private IP blocking
+- **User Experience**: Complete form workflows, accessibility, error handling
+- **Business Logic**: Link creation, validation, pagination, click tracking
+- **Data Integrity**: Schema validation, type safety, edge case handling
+- **Performance**: Component optimization, debouncing, efficient rendering
 
 ### Quality Objectives
 
@@ -283,8 +338,16 @@ pnpm test --reporter=verbose --run
 - ✅ **Performance:** Tests running in <20 seconds
 - ✅ **Stability:** 100% passing tests in main branch
 - ✅ **Maintainability:** Clear and documented structure
+- ✅ **Security:** Comprehensive URL validation and input sanitization
 
 ---
 
-**Last updated:** September 2025  
+**Last updated:** September 7, 2025  
 **Maintained by:** BRé [breimerct@gmail.com](mailto:breimerct@gmail.com)
+
+### Recent Updates
+
+- ✅ **September 7, 2025**: Added comprehensive URL validation testing (29 tests)
+- ✅ **Security Enhancement**: Implemented HTTPS-only validation with private IP blocking
+- ✅ **Test Coverage**: Updated to 242 tests across 15 test files
+- ✅ **Documentation**: Enhanced testing documentation with security focus
