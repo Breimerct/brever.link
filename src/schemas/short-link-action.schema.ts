@@ -9,8 +9,8 @@ export const shortLinkActionSchema = z.object({
       (url) => {
         try {
           const urlObj = new URL(url);
-          // Solo permitir protocolos seguros
-          return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+
+          return urlObj.protocol === "https:";
         } catch {
           return false;
         }

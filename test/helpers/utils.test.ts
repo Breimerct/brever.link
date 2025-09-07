@@ -70,10 +70,8 @@ describe("Utils - getDomain function", () => {
   it("handles different protocols", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    // HTTP and other protocols are not allowed by the new validation
     expect(getDomain("http://breimer.dev")).toBe("invalid url");
     expect(getDomain("ftp://breimer.dev")).toBe("invalid url");
-
     expect(consoleSpy).toHaveBeenCalledTimes(2);
     consoleSpy.mockRestore();
   });
@@ -81,10 +79,8 @@ describe("Utils - getDomain function", () => {
   it("handles ports", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    // Custom ports are not allowed by the new validation
     expect(getDomain("https://breimer.dev:8080")).toBe("invalid url");
     expect(getDomain("https://www.breimer.dev:3000")).toBe("invalid url");
-
     expect(consoleSpy).toHaveBeenCalledTimes(2);
     consoleSpy.mockRestore();
   });
@@ -106,7 +102,6 @@ describe("Utils - formatDate function", () => {
     const date = new Date("2024-01-15T14:30:00Z");
     const formatted = formatDate(date);
 
-    // El formato exacto puede variar según la zona horaria
     expect(formatted).toMatch(/15 Jan - 2024, \d{2}:\d{2} [AP]M/);
   });
 

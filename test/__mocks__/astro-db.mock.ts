@@ -1,4 +1,3 @@
-// Mock simplificado de astro:db
 const createMockChain = () => {
   const chain = {
     select: () => chain,
@@ -24,7 +23,6 @@ export const like = () => {};
 export const desc = () => {};
 export const count = () => ({ count: 0 });
 
-// Mock de la tabla de links
 export const LinkTable = {
   id: "id",
   url: "url",

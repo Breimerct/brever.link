@@ -3,7 +3,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { shorLink } from "../../src/services/shorten.service";
 import { ActionError } from "astro:actions";
 
-// Mock de las dependencias
 vi.mock("../../src/services/link.service", () => ({
   verifyIsExistingLinkBySlug: vi.fn(),
   createNewLink: vi.fn(),
@@ -15,13 +14,11 @@ vi.mock("qrcode", () => ({
   },
 }));
 
-// Importar después del mock
 import {
   verifyIsExistingLinkBySlug,
   createNewLink,
 } from "../../src/services/link.service";
 
-// Crear referencias mockeadas
 const mockVerifyIsExistingLinkBySlug = vi.mocked(verifyIsExistingLinkBySlug);
 const mockCreateNewLink = vi.mocked(createNewLink);
 
@@ -37,7 +34,6 @@ describe("shorLink Service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Setup default mocks
     mockContext.request.headers.get.mockReturnValue(
       "https://github.com/some-page",
     );

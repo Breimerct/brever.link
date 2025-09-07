@@ -4,24 +4,21 @@ import { getLinkBySlug, incrementClickCount } from "./services/link.service";
 export const onRequest = defineMiddleware(async (context, next) => {
   const { request, redirect } = context;
   const url = new URL(request.url);
-  const slug = url.pathname.split("/").pop(); // Extract slug from the URL path
+  const slug = url.pathname.split("/").pop();
 
   if (!slug || slug === "/") {
-    return next(); // Skip if slug is empty or root path
+    return next();
   }
 
   if (slug) {
-    const { data: link, success } = await getLinkBySlug(slug); // Fetch the link from the database
+    const { data: link, success } = await getLinkBySlug(slug);
 
     if (!link || !success) {
-      // redirect to the homepage if the link is not found
       return redirect("/");
     }
 
-    // Increment click count
     await incrementClickCount(slug);
 
-    // Redirect to the original URL
     return Response.redirect(link.url, 302);
   }
 

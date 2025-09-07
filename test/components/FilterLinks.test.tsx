@@ -3,7 +3,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "../utils";
 import userEvent from "@testing-library/user-event";
 
-// Mock dependencies
 vi.mock("astro:transitions/client", () => ({
   navigate: vi.fn(),
 }));
@@ -12,7 +11,6 @@ vi.mock("@uidotdev/usehooks", () => ({
   useDebounce: vi.fn((value, _delay) => value),
 }));
 
-// Mock react-hook-form
 const mockWatch = vi.fn();
 const mockHandleSubmit = vi.fn();
 
@@ -35,7 +33,6 @@ vi.mock("react-hook-form", async () => {
   };
 });
 
-// Mock del componente Input
 vi.mock("../../src/components/input/Input.tsx", () => ({
   default: ({ name, label, placeholder, autoComplete }: any) => (
     <div data-testid="input-component">
@@ -51,7 +48,6 @@ vi.mock("../../src/components/input/Input.tsx", () => ({
   ),
 }));
 
-// Importa el componente que quieres testear
 import FilterLinks from "../../src/components/filter-links/FilterLinks";
 import { navigate } from "astro:transitions/client";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -59,16 +55,11 @@ import { useDebounce } from "@uidotdev/usehooks";
 describe("FilterLinks Component", () => {
   const mockNavigate = vi.mocked(navigate);
   const mockUseDebounce = vi.mocked(useDebounce);
-
-  // Mock para window.location.search
   let mockLocation: any;
 
-  // Setup que se ejecuta antes de cada test
   beforeEach(() => {
-    // Limpiar mocks
     vi.clearAllMocks();
 
-    // Mock window.location
     mockLocation = {
       search: "",
     };
@@ -77,13 +68,11 @@ describe("FilterLinks Component", () => {
       writable: true,
     });
 
-    // Mock URLSearchParams
     global.URLSearchParams = class URLSearchParams {
       private params: Map<string, string> = new Map();
 
       constructor(search?: string) {
         if (search) {
-          // Parse basic query string
           const pairs = search.replace(/^\?/, "").split("&");
           pairs.forEach((pair) => {
             const [key, value] = pair.split("=");
@@ -118,15 +107,11 @@ describe("FilterLinks Component", () => {
       }
     } as any;
 
-    // Reset useDebounce mock to return the value immediately by default
     mockUseDebounce.mockImplementation((value) => value);
-
-    // Setup react-hook-form mocks
     mockHandleSubmit.mockImplementation((fn) => (e: any) => {
       e?.preventDefault?.();
       fn({ search: "" });
     });
-
     mockWatch.mockImplementation((callback) => {
       if (callback) {
         callback({ search: "" });
@@ -135,7 +120,6 @@ describe("FilterLinks Component", () => {
     });
   });
 
-  // Cleanup que se ejecuta después de cada test
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -150,6 +134,7 @@ describe("FilterLinks Component", () => {
       render(<FilterLinks />);
 
       const form = document.querySelector("form");
+
       expect(form).toBeInTheDocument();
       expect(form).toHaveClass("mb-4");
     });
@@ -177,10 +162,8 @@ describe("FilterLinks Component", () => {
       const form = document.querySelector("form");
       const input = screen.getByTestId("input-search");
 
-      // Simular entrada de texto
       await userEvent.type(input, "test-search");
 
-      // Simular envío del formulario
       fireEvent.submit(form!);
 
       await waitFor(() => {
@@ -190,8 +173,6 @@ describe("FilterLinks Component", () => {
 
     it("should update URL params on form submission", async () => {
       mockLocation.search = "?page=2";
-
-      // Mock handleSubmit para capturar el valor correcto
       mockHandleSubmit.mockImplementation((fn) => (e: any) => {
         e?.preventDefault?.();
         fn({ search: "example-slug" });
@@ -202,10 +183,8 @@ describe("FilterLinks Component", () => {
       const form = document.querySelector("form");
       const input = screen.getByTestId("input-search");
 
-      // Simular entrada de texto
       await userEvent.type(input, "example-slug");
 
-      // Simular envío del formulario
       fireEvent.submit(form!);
 
       await waitFor(() => {
@@ -238,7 +217,6 @@ describe("FilterLinks Component", () => {
 
       const { rerender } = render(<FilterLinks />);
 
-      // Simular cambio en el valor debounced
       debouncedValue = "debounced-search";
       mockUseDebounce.mockReturnValue("debounced-search");
 
@@ -310,8 +288,6 @@ describe("FilterLinks Component", () => {
 
     it("should handle complex query string scenarios", async () => {
       mockLocation.search = "?page=3&sort=asc&category=links";
-
-      // Mock handleSubmit para capturar el valor correcto
       mockHandleSubmit.mockImplementation((fn) => (e: any) => {
         e?.preventDefault?.();
         fn({ search: "complex-search" });
@@ -329,7 +305,7 @@ describe("FilterLinks Component", () => {
         const call =
           mockNavigate.mock.calls[mockNavigate.mock.calls.length - 1][0];
         expect(call).toContain("search=complex-search");
-        expect(call).toContain("page=1"); // Should reset to page 1
+        expect(call).toContain("page=1");
         expect(call).toContain("sort=asc");
         expect(call).toContain("category=links");
       });
@@ -338,10 +314,8 @@ describe("FilterLinks Component", () => {
 
   describe("React Hook Form Integration", () => {
     it("should use zodResolver with FilterLinksSchema", () => {
-      // This test verifies that the component uses the correct schema
       render(<FilterLinks />);
 
-      // The form should render without errors, indicating proper schema setup
       expect(document.querySelector("form")).toBeInTheDocument();
     });
 
@@ -357,10 +331,8 @@ describe("FilterLinks Component", () => {
 
       const input = screen.getByTestId("input-search");
 
-      // The watch function should be set up (no errors thrown)
       await userEvent.type(input, "watched-value");
 
-      // Component should still be functional
       expect(document.querySelector("form")).toBeInTheDocument();
     });
   });
@@ -369,14 +341,12 @@ describe("FilterLinks Component", () => {
     it("should clean up on unmount", () => {
       const { unmount } = render(<FilterLinks />);
 
-      // Component should unmount without errors
       expect(() => unmount()).not.toThrow();
     });
 
     it("should handle re-renders correctly", () => {
       const { rerender } = render(<FilterLinks />);
 
-      // Re-render should work without issues
       rerender(<FilterLinks />);
 
       expect(document.querySelector("form")).toBeInTheDocument();
@@ -392,7 +362,6 @@ describe("FilterLinks Component", () => {
 
       await user.type(input, "interactive-search");
 
-      // Input should accept the typed value
       expect(input).toBeInTheDocument();
     });
 
@@ -402,7 +371,6 @@ describe("FilterLinks Component", () => {
 
       const input = screen.getByTestId("input-search");
 
-      // Simulate rapid typing
       await user.type(input, "rapid");
       await user.clear(input);
       await user.type(input, "typing");
@@ -415,7 +383,6 @@ describe("FilterLinks Component", () => {
 
       const form = document.querySelector("form");
 
-      // Reset should not cause errors
       fireEvent.reset(form!);
 
       expect(form).toBeInTheDocument();
@@ -433,7 +400,6 @@ describe("FilterLinks Component", () => {
     it("should handle missing window.location", () => {
       const originalLocation = window.location;
 
-      // Mock location as undefined/null scenario
       Object.defineProperty(window, "location", {
         value: { search: "" },
         writable: true,
@@ -442,7 +408,6 @@ describe("FilterLinks Component", () => {
 
       expect(() => render(<FilterLinks />)).not.toThrow();
 
-      // Restore
       Object.defineProperty(window, "location", {
         value: originalLocation,
         writable: true,
@@ -451,16 +416,12 @@ describe("FilterLinks Component", () => {
     });
 
     it("should handle navigation errors gracefully", async () => {
-      // Mock navigate to not throw during initial render
-      mockNavigate.mockImplementation(async () => {
-        // Silent mock - no error during render
-      });
+      mockNavigate.mockImplementation(async () => {});
 
       render(<FilterLinks />);
 
       const form = document.querySelector("form");
 
-      // Navigation might fail but shouldn't crash the form
       expect(form).toBeInTheDocument();
     });
   });
@@ -476,13 +437,12 @@ describe("FilterLinks Component", () => {
 
       render(<TestWrapper />);
 
-      // Should render initially
       expect(renderSpy).toHaveBeenCalledTimes(1);
     });
 
     it("should handle debouncing correctly", () => {
       mockUseDebounce.mockImplementation((value, delay) => {
-        expect(delay).toBe(500); // Verify debounce delay
+        expect(delay).toBe(500);
         return value;
       });
 
@@ -497,9 +457,8 @@ describe("FilterLinks Component", () => {
       render(<FilterLinks />);
 
       const form = document.querySelector("form");
-      expect(form).toBeInTheDocument();
 
-      // Form should be accessible
+      expect(form).toBeInTheDocument();
       expect(form!.tagName).toBe("FORM");
     });
 
@@ -519,7 +478,6 @@ describe("FilterLinks Component", () => {
 
       const input = screen.getByTestId("input-search");
 
-      // Should be able to focus and interact with keyboard
       await user.click(input);
       await user.keyboard("keyboard-test");
 

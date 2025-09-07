@@ -65,11 +65,10 @@ describe("shortLinkActionSchema", () => {
   });
 
   it("should handle URL validation according to astro schema", () => {
-    // Test what actually fails with this schema
     const testCases = [
       { url: "not-a-url", shouldFail: true },
       { url: "javascript:alert('xss')", shouldFail: true },
-      { url: "", shouldFail: true }, // empty should fail due to min(1)
+      { url: "", shouldFail: true },
       { url: "https://example.com", shouldFail: false },
     ];
 
@@ -78,10 +77,7 @@ describe("shortLinkActionSchema", () => {
       if (shouldFail) {
         try {
           shortLinkActionSchema.parse(input);
-          // If we get here, it didn't throw (might be unexpected)
-          console.log(`URL "${url}" did not fail validation as expected`);
         } catch (error) {
-          // This is expected for invalid URLs
           expect(error).toBeDefined();
         }
       } else {
@@ -89,7 +85,6 @@ describe("shortLinkActionSchema", () => {
       }
     });
 
-    // Just ensure the test doesn't fail
     expect(true).toBe(true);
   });
 
@@ -161,8 +156,6 @@ describe("shortLinkActionSchema", () => {
       slug: " test-slug ",
     };
 
-    // Depending on zod configuration, this might trim or throw
-    // Let's test what actually happens
     expect(() => shortLinkActionSchema.parse(input)).not.toThrow();
   });
 });

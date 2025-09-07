@@ -19,11 +19,10 @@ export default function LinkCard({ link, className, ...props }: Props) {
           description: "You can now paste it anywhere.",
         });
       })
-      .catch((err) => {
+      .catch(() => {
         toast.error("Failed to copy link!", {
           description: "Please try again.",
         });
-        console.error("Failed to copy link:", err);
       });
   };
 

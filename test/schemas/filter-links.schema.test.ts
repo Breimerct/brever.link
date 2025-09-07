@@ -72,7 +72,6 @@ describe("FilterLinksSchema", () => {
       search: 123,
     };
 
-    // Should throw validation error for non-string values
     expect(() => FilterLinksSchema.parse(input)).toThrow();
   });
 });

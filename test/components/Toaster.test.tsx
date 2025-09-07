@@ -1,7 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "../utils";
 
-// Mock de sonner
 vi.mock("sonner", () => ({
   Toaster: ({
     richColors,
@@ -20,24 +19,15 @@ vi.mock("sonner", () => ({
   ),
 }));
 
-// Mock de createPortal
 vi.mock("react-dom", () => ({
   createPortal: (children: React.ReactNode, _container: Element) => children,
 }));
 
-// Importa el componente que quieres testear
 import Toaster from "../../src/components/toaster/Toaster";
 
 describe("Toaster Component", () => {
-  // Setup que se ejecuta antes de cada test
   beforeEach(() => {
-    // Limpiar mocks, configurar estado inicial, etc.
     vi.clearAllMocks();
-  });
-
-  // Cleanup que se ejecuta después de cada test
-  afterEach(() => {
-    // Limpieza adicional si es necesaria
   });
 
   describe("Rendering", () => {
@@ -68,7 +58,6 @@ describe("Toaster Component", () => {
     it("should be a wrapper around Sonner toaster", () => {
       const { container } = render(<Toaster />);
 
-      // Verificar que el componente está renderizado
       expect(container.firstChild).toBeTruthy();
     });
 

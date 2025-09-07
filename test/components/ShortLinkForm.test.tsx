@@ -2,10 +2,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "../utils";
 import userEvent from "@testing-library/user-event";
-
 import ShortLinkForm from "../../src/components/short-link-form/ShortLinkForm";
 
-// Mock de las dependencias
 vi.mock("astro:actions", () => ({
   actions: {
     shortenAction: {
@@ -24,7 +22,6 @@ vi.mock("sonner", () => ({
   },
 }));
 
-// Importar los mocks después de declararlos
 import { actions } from "astro:actions";
 import { navigate } from "astro/virtual-modules/transitions-router.js";
 import { toast } from "sonner";
@@ -235,7 +232,7 @@ describe("ShortLinkForm", () => {
 
       await user.type(urlInput, "invalid-url");
       await user.type(slugInput, "test-slug");
-      await user.tab(); // Trigger validation
+      await user.tab();
 
       await waitFor(() => {
         expect(screen.getByText("Invalid URL")).toBeInTheDocument();
@@ -262,19 +259,14 @@ describe("ShortLinkForm", () => {
       const urlInput = screen.getByTestId("url-input");
       const slugInput = screen.getByTestId("slug-input");
 
-      // Enter invalid data first
       await user.type(urlInput, "invalid-url");
       await user.tab();
-
       await waitFor(() => {
         expect(screen.getByText("Invalid URL")).toBeInTheDocument();
       });
-
-      // Clear and enter valid data
       await user.clear(urlInput);
       await user.type(urlInput, "https://example.com");
       await user.type(slugInput, "test-slug");
-
       await waitFor(() => {
         expect(screen.queryByText("Invalid URL")).not.toBeInTheDocument();
       });
@@ -312,9 +304,8 @@ describe("ShortLinkForm", () => {
       render(<ShortLinkForm />);
 
       const fieldsets = screen.getAllByRole("group");
-      expect(fieldsets).toHaveLength(2);
 
-      // Check for screen reader only legends
+      expect(fieldsets).toHaveLength(2);
       expect(document.querySelector("legend")).toBeInTheDocument();
     });
 
@@ -326,7 +317,6 @@ describe("ShortLinkForm", () => {
       const randomizeButton = screen.getByTestId("randomize-slug-button");
       const submitButton = screen.getByTestId("short-link-form-submit");
 
-      // Test tab navigation
       await user.tab();
       expect(urlInput).toHaveFocus();
 
@@ -379,7 +369,6 @@ describe("ShortLinkForm", () => {
         });
       });
 
-      // Should not crash the app and should not navigate
       expect(screen.getByTestId("short-link-form-submit")).toBeInTheDocument();
       expect(navigate).not.toHaveBeenCalled();
 
@@ -392,7 +381,6 @@ describe("ShortLinkForm", () => {
       const slugInput = screen.getByTestId("slug-input") as HTMLInputElement;
       const randomizeButton = screen.getByTestId("randomize-slug-button");
 
-      // Click multiple times rapidly
       await user.click(randomizeButton);
       await user.click(randomizeButton);
       await user.click(randomizeButton);
@@ -407,7 +395,7 @@ describe("ShortLinkForm", () => {
       const submitButton = screen.getByTestId("short-link-form-submit");
 
       await user.type(slugInput, "my-slug");
-      await user.click(submitButton); // This should trigger URL validation error
+      await user.click(submitButton);
 
       await waitFor(() => {
         expect(screen.getByText("URL is required")).toBeInTheDocument();

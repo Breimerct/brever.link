@@ -36,8 +36,7 @@ export function getDomain(url: string): string {
 
     const { hostname } = new URL(normalizedUrl!);
     return hostname.replace("www.", "");
-  } catch (error) {
-    console.error("Invalid URL:", error);
+  } catch {
     return "invalid url";
   }
 }

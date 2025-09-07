@@ -1,25 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-// Mock del módulo astro:middleware
 vi.mock("astro:middleware", () => ({
   defineMiddleware: (fn: typeof Function) => fn,
 }));
 
-// Mock de los servicios de link - DEBE estar antes de importar el middleware
 vi.mock("../src/services/link.service", () => ({
   getLinkBySlug: vi.fn(),
   incrementClickCount: vi.fn(),
 }));
 
-// Ahora importamos después de los mocks
 import { onRequest } from "../src/middleware";
 import {
   getLinkBySlug,
   incrementClickCount,
 } from "../src/services/link.service";
 
-// Tipos para los mocks
 const mockGetLinkBySlug = getLinkBySlug as ReturnType<typeof vi.fn>;
 const mockIncrementClickCount = incrementClickCount as ReturnType<typeof vi.fn>;
 
@@ -44,7 +40,6 @@ describe("Middleware", () => {
       redirect: mockRedirect,
     };
 
-    // Reset de los mocks de servicios
     mockGetLinkBySlug.mockReset();
     mockIncrementClickCount.mockReset();
   });
@@ -216,8 +211,6 @@ describe("Middleware", () => {
       expect(mockGetLinkBySlug).toHaveBeenCalledWith("test-slug");
       expect(mockIncrementClickCount).toHaveBeenCalledWith("test-slug");
       expect(mockNext).not.toHaveBeenCalled();
-
-      // Verificar que se retorna una respuesta de redirección
       expect(result).toBeInstanceOf(Response);
       expect((result as Response).status).toBe(302);
       expect((result as Response).headers.get("location")).toBe(
@@ -244,8 +237,6 @@ describe("Middleware", () => {
 
       expect(mockGetLinkBySlug).toHaveBeenCalledWith("test-slug");
       expect(mockIncrementClickCount).toHaveBeenCalledWith("test-slug");
-
-      // Aún debe redirigir aunque falle el incremento
       expect(result).toBeInstanceOf(Response);
       expect((result as Response).status).toBe(302);
       expect((result as Response).headers.get("location")).toBe(
@@ -314,8 +305,6 @@ describe("Middleware", () => {
         new Error("Database connection failed"),
       );
 
-      // El middleware debería manejar errores gracefully
-      // Si no hay manejo de errores explícito, la excepción se propagará
       await expect(onRequest(mockContext, mockNext)).rejects.toThrow(
         "Database connection failed",
       );
@@ -345,7 +334,6 @@ describe("Middleware", () => {
 
       mockIncrementClickCount.mockRejectedValue(new Error("Update failed"));
 
-      // Debería fallar si incrementClickCount lanza una excepción
       await expect(onRequest(mockContext, mockNext)).rejects.toThrow(
         "Update failed",
       );
@@ -371,7 +359,6 @@ describe("Middleware", () => {
     });
 
     it("should handle malformed URLs gracefully", async () => {
-      // Probando con una URL que podría causar problemas al parsear
       mockContext.request = new Request("https://example.com/valid-slug");
 
       mockGetLinkBySlug.mockResolvedValue({
@@ -379,7 +366,7 @@ describe("Middleware", () => {
         data: {
           id: "1",
           slug: "valid-slug",
-          url: "https://valid-target.com", // URL válida en lugar de malformada
+          url: "https://valid-target.com",
           shortLink: "brever.link/abc",
           clickCount: 5,
           createdAt: new Date(),
@@ -391,7 +378,6 @@ describe("Middleware", () => {
 
       const result = await onRequest(mockContext, mockNext);
 
-      // Debería redirigir correctamente
       expect(result).toBeInstanceOf(Response);
       expect((result as Response).status).toBe(302);
       expect((result as Response).headers.get("location")).toBe(
@@ -407,7 +393,7 @@ describe("Middleware", () => {
         data: {
           id: "1",
           slug: "bad-slug",
-          url: "not-a-valid-url", // URL malformada que causará error
+          url: "not-a-valid-url",
           shortLink: "brever.link/abc",
           clickCount: 5,
           createdAt: new Date(),
@@ -417,7 +403,6 @@ describe("Middleware", () => {
 
       mockIncrementClickCount.mockResolvedValue({ success: true });
 
-      // Debería lanzar una excepción al intentar crear Response.redirect con URL inválida
       await expect(onRequest(mockContext, mockNext)).rejects.toThrow();
     });
   });
@@ -502,7 +487,6 @@ describe("Middleware", () => {
 
       await onRequest(mockContext, mockNext);
 
-      // Debería buscar el slug decodificado
       expect(mockGetLinkBySlug).toHaveBeenCalledWith("my%20slug");
     });
 

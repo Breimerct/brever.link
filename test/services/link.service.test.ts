@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-// Mock del módulo astro:db - DEBE estar al inicio antes de cualquier import
 vi.mock("astro:db", () => ({
   db: {
     select: vi.fn(),
@@ -23,14 +22,12 @@ vi.mock("astro:db", () => ({
   count: vi.fn(),
 }));
 
-// Mock de crypto.randomUUID
 Object.defineProperty(global, "crypto", {
   value: {
     randomUUID: vi.fn(() => "mocked-uuid-123"),
   },
 });
 
-// Ahora importamos el servicio después del mock
 import {
   verifyIsExistingLinkBySlug,
   getLinkBySlug,
@@ -39,15 +36,12 @@ import {
   getAllLinks,
   getAllPaginatedLinks,
 } from "../../src/services/link.service";
-
-// Imports del mock para usarlos en los tests
 import { db, LinkTable, eq, like, desc } from "astro:db";
 
 describe("Link Service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Setup default mock chain
     (db.select as any).mockReturnValue({
       from: vi.fn().mockReturnValue({
         where: vi.fn().mockReturnValue({
@@ -225,7 +219,6 @@ describe("Link Service", () => {
         clickCount: 6,
       };
 
-      // Mock getLinkBySlug - primera llamada para obtener el link
       (db.select as any).mockReturnValue({
         from: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -234,7 +227,6 @@ describe("Link Service", () => {
         }),
       });
 
-      // Mock update - segunda llamada para actualizar
       (db.update as any).mockReturnValue({
         set: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -317,7 +309,6 @@ describe("Link Service", () => {
         clickCount: 5,
       };
 
-      // Mock db.select to return a link successfully
       (db.select as any).mockReturnValue({
         from: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -326,7 +317,6 @@ describe("Link Service", () => {
         }),
       });
 
-      // Mock db.update to fail with database error
       (db.update as any).mockReturnValue({
         set: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -492,7 +482,6 @@ describe("Link Service", () => {
     ];
 
     it("should return paginated links with correct metadata", async () => {
-      // Mock para la consulta de links
       const mockLimit = vi.fn().mockReturnValue({
         offset: vi.fn().mockReturnValue({
           execute: vi.fn().mockResolvedValue(mockLinks),
@@ -513,7 +502,6 @@ describe("Link Service", () => {
         }),
       });
 
-      // Mock para la consulta de count
       (db.select as any).mockReturnValueOnce({
         from: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({

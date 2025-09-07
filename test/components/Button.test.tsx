@@ -46,8 +46,8 @@ describe("Button Component", () => {
     render(<Button className="custom-class">Custom button</Button>);
 
     const button = screen.getByRole("button");
+
     expect(button).toHaveClass("custom-class");
-    // También debe mantener las clases por defecto
     expect(button).toHaveClass("bg-slate-900", "text-white", "px-4", "py-2");
   });
 

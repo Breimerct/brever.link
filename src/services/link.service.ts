@@ -11,8 +11,7 @@ export const verifyIsExistingLinkBySlug = async (
       .where(eq(LinkTable.slug, slug))
       .execute();
     return existingLinks.length > 0;
-  } catch (error) {
-    console.error("Error in verifyIsExistingLink:", error);
+  } catch {
     return false;
   }
 };
@@ -71,8 +70,7 @@ export const incrementClickCount = async (slug: string) => {
       data: updatedLink,
       error: null,
     };
-  } catch (error) {
-    console.error("Error in incrementClickCount:", error);
+  } catch {
     return {
       success: false,
       error: "Failed to increment click count",
@@ -112,8 +110,7 @@ export const createNewLink = async ({
       error: null,
       message: "Link created successfully",
     };
-  } catch (error) {
-    console.error("Error in createLink:", error);
+  } catch {
     return {
       success: false,
       error: "Failed to create link",
@@ -130,8 +127,7 @@ export const getAllLinks = async (): Promise<Link[]> => {
       .execute();
 
     return links;
-  } catch (error) {
-    console.error("Error in getAllLinks:", error);
+  } catch {
     return [];
   }
 };
@@ -167,8 +163,7 @@ export const getAllPaginatedLinks = async (
       hasNextPage: page < totalPages,
       hasPreviousPage: page > 1,
     };
-  } catch (error) {
-    console.error("Error in getAllPaginatedLinks:", error);
+  } catch {
     return {
       links: [],
       totalLinks: 0,

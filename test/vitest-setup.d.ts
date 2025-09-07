@@ -12,5 +12,4 @@ declare global {
   }
 }
 
-// Extend Vitest's expect with jest-dom matchers
 expect.extend(matchers);

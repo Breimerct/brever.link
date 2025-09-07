@@ -1,4 +1,3 @@
-// Mock simplificado de ActionError de astro:actions
 export class ActionError extends Error {
   code: string;
 
@@ -9,7 +8,6 @@ export class ActionError extends Error {
   }
 }
 
-// Mock de ActionAPIContext
 export interface ActionAPIContext {
   request: {
     headers: {

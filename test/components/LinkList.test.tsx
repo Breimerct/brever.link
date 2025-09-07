@@ -1,11 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "../utils";
-
-// Importa el componente que quieres testear
 import LinkList from "../../src/components/link-list/LinkList";
 import type { Link } from "../../src/types/link.type";
 
-// Mock del componente LinkCard
 vi.mock("../../src/components/link-card/LinkCard", () => ({
   default: ({ link, className }: { link: Link; className: string }) => (
     <li data-testid={`link-card-${link.id}`} className={className}>
@@ -50,15 +47,8 @@ describe("LinkList Component", () => {
     },
   ];
 
-  // Setup que se ejecuta antes de cada test
   beforeEach(() => {
-    // Limpiar mocks, configurar estado inicial, etc.
     vi.clearAllMocks();
-  });
-
-  // Cleanup que se ejecuta después de cada test
-  afterEach(() => {
-    // Limpieza adicional si es necesaria
   });
 
   describe("Rendering", () => {
@@ -77,7 +67,6 @@ describe("LinkList Component", () => {
     it("should render all provided links", () => {
       render(<LinkList links={mockLinks} />);
 
-      // Verificar que se renderizan todos los links
       expect(screen.getByTestId("link-card-1")).toBeInTheDocument();
       expect(screen.getByTestId("link-card-2")).toBeInTheDocument();
       expect(screen.getByTestId("link-card-3")).toBeInTheDocument();
@@ -93,11 +82,9 @@ describe("LinkList Component", () => {
     it("should pass link data to LinkCard components", () => {
       render(<LinkList links={mockLinks} />);
 
-      // Verificar que los datos se pasan correctamente
       expect(screen.getByText("test-link-1")).toBeInTheDocument();
       expect(screen.getByText("test-link-2")).toBeInTheDocument();
       expect(screen.getByText("test-link-3")).toBeInTheDocument();
-
       expect(screen.getByText("https://example.com")).toBeInTheDocument();
       expect(screen.getByText("https://google.com")).toBeInTheDocument();
       expect(screen.getByText("https://github.com")).toBeInTheDocument();
@@ -146,7 +133,6 @@ describe("LinkList Component", () => {
     it("should use link id as key for LinkCard components", () => {
       render(<LinkList links={mockLinks} />);
 
-      // Los IDs deben ser únicos y usados como keys
       mockLinks.forEach((link) => {
         expect(screen.getByTestId(`link-card-${link.id}`)).toBeInTheDocument();
       });
@@ -155,7 +141,6 @@ describe("LinkList Component", () => {
     it("should pass each link object correctly", () => {
       render(<LinkList links={mockLinks} />);
 
-      // Verificar que cada link tiene su información específica
       expect(screen.getByText("5 clicks")).toBeInTheDocument();
       expect(screen.getByText("10 clicks")).toBeInTheDocument();
       expect(screen.getByText("0 clicks")).toBeInTheDocument();
@@ -259,7 +244,6 @@ describe("LinkList Component", () => {
       const list = screen.getByRole("list");
       const listItems = screen.getAllByRole("listitem");
 
-      // Verificar que todos los list items son hijos del ul
       listItems.forEach((item) => {
         expect(list).toContainElement(item);
       });
@@ -270,10 +254,8 @@ describe("LinkList Component", () => {
     it("should not re-render unnecessarily with same props", () => {
       const { rerender } = render(<LinkList links={mockLinks} />);
 
-      // Re-render con las mismas props
       rerender(<LinkList links={mockLinks} />);
 
-      // Debería seguir mostrando los mismos elementos
       expect(screen.getByTestId("link-card-1")).toBeInTheDocument();
       expect(screen.getByTestId("link-card-2")).toBeInTheDocument();
       expect(screen.getByTestId("link-card-3")).toBeInTheDocument();
@@ -286,7 +268,6 @@ describe("LinkList Component", () => {
       expect(screen.getByTestId("link-card-1")).toBeInTheDocument();
       expect(screen.queryByTestId("link-card-2")).not.toBeInTheDocument();
 
-      // Re-render con diferentes links
       rerender(<LinkList links={mockLinks} />);
 
       expect(screen.getByTestId("link-card-1")).toBeInTheDocument();

@@ -1,12 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "../utils";
 import { FormProvider, useForm } from "react-hook-form";
-
-// Importa el componente que quieres testear
 import Input from "../../src/components/input/Input";
 import type { Link } from "../../src/types/link.type";
 
-// Mock del helper utils
 vi.mock("../../src/helpers/utils", () => ({
   cn: (...classes: (string | undefined | null | boolean | object)[]) => {
     return classes
@@ -16,7 +13,6 @@ vi.mock("../../src/helpers/utils", () => ({
   },
 }));
 
-// Componente wrapper para tests que necesitan FormProvider
 const FormWrapper = ({
   children,
   defaultValues = {},
@@ -54,15 +50,12 @@ describe("Input Component", () => {
     },
   ];
 
-  // Setup que se ejecuta antes de cada test
   beforeEach(() => {
-    // Limpiar mocks, configurar estado inicial, etc.
     vi.clearAllMocks();
   });
 
-  // Cleanup que se ejecuta después de cada test
   afterEach(() => {
-    // Limpieza adicional si es necesaria
+    vi.restoreAllMocks();
   });
 
   describe("Basic Rendering", () => {
@@ -107,7 +100,6 @@ describe("Input Component", () => {
         </FormWrapper>,
       );
 
-      // Buscar el input usando un selector más específico
       const input = screen.getByDisplayValue("") as HTMLInputElement;
       expect(input).toBeRequired();
       expect(screen.getByText("*")).toBeInTheDocument();
