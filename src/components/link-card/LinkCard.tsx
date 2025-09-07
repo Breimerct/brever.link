@@ -36,9 +36,15 @@ export default function LinkCard({ link, className, ...props }: Props) {
     document.body.removeChild(linkElement);
   };
 
+  const formattedDate = formatDate(link.createdAt);
+  const isoDate = new Date(link.createdAt).toISOString();
+
   return (
     <li
+      data-testid={`link-card-${link.id}`}
       data-short={link.shortLink}
+      data-url={link.url}
+      data-slug={link.slug}
       {...props}
       className={cn(
         "p-4 bg-white rounded-lg shadow-md",
@@ -49,15 +55,16 @@ export default function LinkCard({ link, className, ...props }: Props) {
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-2">
-        <div>
-          <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
-            <span>{getDomain(link.url)}</span>
-          </h1>
-        </div>
+      <header className="flex items-center justify-between gap-2">
+        <h2 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
+          <span data-testid="domain-name">{getDomain(link.url)}</span>
+        </h2>
 
         <div>
           <button
+            id={`copy-link-${link.slug}`}
+            aria-label="Copy short link"
+            data-testid={`copy-button-${link.slug}`}
             onClick={handleCopy}
             type="button"
             className={cn(
@@ -71,35 +78,48 @@ export default function LinkCard({ link, className, ...props }: Props) {
             <IconCopy />
           </button>
         </div>
-      </div>
+      </header>
 
       <a
+        data-testid="short-link"
         href={link.shortLink}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`Short link: ${link.shortLink}`}
         className={cn(
           "text-slate-900 dark:text-slate-200 font-semibold",
           "transition-all duration-200 ease-in-out",
           "hover:underline",
         )}
       >
-        <h1 className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
-          <span className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-800 dark:text-gray-300 text-sm">
+        <p className="text-lg font-semibold w-full text-nowrap overflow-hidden text-ellipsis">
+          <span
+            className="bg-gray-200 text-gray-800 font-semibold mr-1 px-1.5 py-0.5 rounded dark:bg-gray-800 dark:text-gray-300 text-sm"
+            data-testid="short-link-text"
+          >
             {link.shortLink}
           </span>
-        </h1>
+        </p>
       </a>
 
       {link.qrCode && (
-        <figure className="flex items-center gap-2">
+        <figure
+          className="flex items-center gap-2"
+          data-testid="qr-code-container"
+        >
           <img
-            src={link.qrCode!}
-            alt="QR code"
-            className="w-16 h-16 rounded-md shadow-md"
+            src={link.qrCode}
+            alt={`QR code for ${link.shortLink}`}
+            data-testid="qr-code-image"
+            className="w-16 h-16 rounded-md"
           />
           <figcaption className="text-sm text-gray-500 dark:text-gray-400">
             <span className="font-semibold">QR Code</span>
             <Button
+              id={`download-qr-${link.slug}`}
+              data-testid={`download-qr-${link.slug}`}
+              type="button"
+              aria-label={`Download QR code for ${link.slug}`}
               fullWidth
               className="mt-2 !text-xs"
               appendIcon={<IconDownload />}
@@ -111,16 +131,16 @@ export default function LinkCard({ link, className, ...props }: Props) {
         </figure>
       )}
 
-      <div className="flex items-center justify-between gap-2">
-        <small>
-          <time>{formatDate(link.createdAt)}</time>
+      <footer className="flex items-center justify-between gap-2 text-gray-500">
+        <small data-testid="creation-date">
+          <time dateTime={isoDate}>{formattedDate}</time>
         </small>
 
-        <div>
-          <span className="text-gray-500">{link.clickCount}</span>
-          <span className="text-gray-500"> clicks</span>
+        <div aria-label="Click statistics" data-testid="click-stats">
+          <span>{link.clickCount}</span>
+          <span> clicks</span>
         </div>
-      </div>
+      </footer>
     </li>
   );
 }

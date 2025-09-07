@@ -88,7 +88,7 @@ export const createNewLink = async ({
   qrCode,
 }: CreateLink) => {
   try {
-    const [insertResult] = await db
+    const { rowsAffected } = await db
       .insert(LinkTable)
       .values({
         id: crypto.randomUUID(),
@@ -98,27 +98,25 @@ export const createNewLink = async ({
         qrCode,
         createdAt: new Date(),
       })
-      .returning();
+      .execute();
 
-    if (!insertResult) {
+    if (rowsAffected === 0) {
       return {
         success: false,
         error: "Insert failed",
-        data: null,
       };
     }
 
     return {
       success: true,
       error: null,
-      data: insertResult,
+      message: "Link created successfully",
     };
   } catch (error) {
     console.error("Error in createLink:", error);
     return {
       success: false,
       error: "Failed to create link",
-      data: null,
     };
   }
 };
