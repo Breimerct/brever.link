@@ -1,0 +1,25 @@
+# <type>[optional scope]: <description>
+#
+# [optional body]
+#
+# [optional footer(s)]
+#
+# Types:
+# feat: New feature
+# fix: Bug fix
+# docs: Documentation changes
+# style: Formatting changes
+# refactor: Refactoring without functionality change
+# perf: Performance improvements
+# test: Adding or fixing tests
+# chore: Changes in tools or dependencies
+# ci: Changes in CI/CD
+# build: Changes in build system
+# revert: Revert commits
+#
+# Rules:
+# - Use lowercase type
+# - Don't end description with a period
+# - Maximum 72 characters in the first line
+# - Blank line between sections
+# - Maximum 100 characters per line in body and footer

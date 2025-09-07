@@ -174,8 +174,8 @@ Coverage reports are generated in:
 
 ### Astro Mocks
 
-- **[test/**mocks**/astro-db.mock.ts](./test/__mocks__/astro-db.mock.ts)** - Mock of database operations
-- **[test/**mocks**/astro-actions.mock.ts](./test/__mocks__/astro-actions.mock.ts)** - Mock of server actions
+- **[test/**mocks**/astro-db.mock.ts](./test/**mocks**/astro-db.mock.ts)** - Mock of database operations
+- **[test/**mocks**/astro-actions.mock.ts](./test/**mocks**/astro-actions.mock.ts)** - Mock of server actions
 
 ## 📋 Patterns and Best Practices
 
