@@ -1,6 +1,10 @@
 # CI/CD Setup para bect.link
 
-Este repositorio implementa un pipeline de CI/CD completo usando GitHub Actions para garantizar la calidad del código antes de hacer merge a la rama master.
+Este repositorio implementa un pipeline de CI/CD completo usando GitHub Actio### Si los tests fallan en CI pero pasan localmente:
+1. Verificar que las dependencias están sincronizadas (`npm install`)
+2. Verificar variables de entorno si las hay
+3. Revisar diferencias entre entorno local y CI
+4. Si usas pnpm localmente, asegúrate de que el package.json esté actualizadoara garantizar la calidad del código antes de hacer merge a la rama master.
 
 ## 🚀 Configuración Implementada
 
@@ -18,7 +22,7 @@ Este repositorio implementa un pipeline de CI/CD completo usando GitHub Actions 
   - **coverage**: Genera reporte de cobertura de tests
   - **dependency-audit**: Auditoría de seguridad de dependencias
 
-### 2. Scripts de npm/pnpm Actualizados
+### 2. Scripts de npm Actualizados
 
 Se agregaron los siguientes scripts al `package.json`:
 
@@ -54,23 +58,23 @@ Para que un Pull Request pueda ser mergeado a master, debe cumplir:
 
 ```bash
 # Instalar dependencias
-pnpm install
+npm install
 
 # Ejecutar tests en modo watch
-pnpm run test:watch
+npm run test:watch
 
 # Ejecutar todos los checks antes de hacer PR
-pnpm run lint:eslint
-pnpm run lint:check
-pnpm run check
-pnpm run test:run
-pnpm run build
+npm run lint:eslint
+npm run lint:check
+npm run check
+npm run test:run
+npm run build
 
 # Ver cobertura de tests
-pnpm run test:coverage
+npm run test:coverage
 
 # Formatear código
-pnpm run lint
+npm run lint
 ```
 
 ## 🔧 Configuración de Branch Protection
@@ -108,7 +112,7 @@ pnpm run lint
 ## 🚨 Troubleshooting
 
 ### Si los tests fallan en CI pero pasan localmente:
-1. Verificar que las dependencias están sincronizadas (`pnpm install`)
+1. Verificar que las dependencias están sincronizadas (`npm install`)
 2. Verificar variables de entorno si las hay
 3. Revisar diferencias entre entorno local y CI
 
