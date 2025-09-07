@@ -38,42 +38,65 @@ export default function ShortLinkForm() {
 
   return (
     <FormProvider {...methods}>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-        <div>
-          <Input
-            label="URL"
-            name="url"
-            type="url"
-            placeholder="https://example.com"
-          />
-        </div>
-
-        <div className="flex w-full items-end gap-2">
-          <div className="flex-1">
+      <form
+        data-testid="short-link-form"
+        className="flex flex-col gap-6"
+        onSubmit={handleSubmit}
+        aria-label="URL shortener form"
+      >
+        <fieldset>
+          <legend className="sr-only">URL to shorten</legend>
+          <div>
             <Input
+              id="url"
+              label="URL"
+              name="url"
+              type="url"
+              placeholder="https://example.com"
+              data-testid="url-input"
+              aria-required="true"
               autoComplete="off"
-              id="slug"
-              label="Slug"
-              name="slug"
-              type="text"
-              placeholder="example"
             />
           </div>
+        </fieldset>
 
-          <div>
-            <Button
-              className="mt-4"
-              type="button"
-              id="randomize-slug"
-              onClick={randomizeSlug}
-            >
-              <span className="text-xs">Randomize</span>
-            </Button>
+        <fieldset>
+          <legend className="sr-only">Custom slug</legend>
+          <div className="flex w-full items-end gap-2">
+            <div className="flex-1">
+              <Input
+                data-testid="slug-input"
+                autoComplete="off"
+                id="slug"
+                label="Slug"
+                name="slug"
+                type="text"
+                placeholder="example"
+              />
+            </div>
+
+            <div>
+              <Button
+                data-testid="randomize-slug-button"
+                className="mt-4"
+                type="button"
+                id="randomize-slug"
+                onClick={randomizeSlug}
+                aria-label="Generate random slug"
+              >
+                <span className="text-xs">Randomize</span>
+              </Button>
+            </div>
           </div>
-        </div>
+        </fieldset>
 
-        <Button className="mt-2" type="submit" fullWidth>
-          short it
+        <Button
+          data-testid="short-link-form-submit"
+          className="mt-2"
+          type="submit"
+          fullWidth
+        >
+          Short it
         </Button>
       </form>
     </FormProvider>
