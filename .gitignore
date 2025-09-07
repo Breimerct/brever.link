@@ -38,3 +38,8 @@ pnpm-workspace.yaml
 # adpters
 .netlify
 .vercel
+
+# testing
+coverage/
+test-results/
+*.tsbuildinfo
