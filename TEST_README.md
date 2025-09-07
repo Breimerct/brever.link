@@ -1,290 +1,290 @@
 # Testing Documentation - brever.link
 
-Este proyecto utiliza **Vitest** como framework de testing principal, siguiendo las mejores prácticas para testing en aplicaciones Astro con React.
+This project uses **Vitest** as the main testing framework, following best practices for testing Astro applications with React.
 
-## 📊 Estado General
+## 📊 General Status
 
-**Estado actual:** ✅ 213 tests pasando en 14 archivos de test
+**Current status:** ✅ 213 tests passing across 14 test files
 
-El proyecto mantiene una cobertura completa de testing que incluye componentes React, servicios de negocio, validación de esquemas, middleware y funciones utilitarias.
+The project maintains complete test coverage including React components, business services, schema validation, middleware, and utility functions.
 
-## 🚀 Configuración del Entorno de Testing
+## 🚀 Testing Environment Configuration
 
-### Framework Principal
+### Main Framework
 
-- **[Vitest](https://vitest.dev/)** - Framework de testing moderno y rápido
-- **[Testing Library](https://testing-library.com/)** - Utilities para testing de componentes React
-- **[jsdom](https://github.com/jsdom/jsdom)** - Entorno DOM simulado para testing
+- **[Vitest](https://vitest.dev/)** - Modern and fast testing framework
+- **[Testing Library](https://testing-library.com/)** - Utilities for testing React components
+- **[jsdom](https://github.com/jsdom/jsdom)** - Simulated DOM environment for testing
 
-### Herramientas Adicionales
+### Additional Tools
 
-- **[@vitest/ui](https://vitest.dev/guide/ui.html)** - Interfaz web interactiva para ejecutar tests
-- **[@vitest/coverage-v8](https://vitest.dev/guide/coverage.html)** - Generación de reportes de cobertura
-- **[@testing-library/user-event](https://testing-library.com/docs/user-event/intro/)** - Simulación avanzada de interacciones de usuario
+- **[@vitest/ui](https://vitest.dev/guide/ui.html)** - Interactive web interface for running tests
+- **[@vitest/coverage-v8](https://vitest.dev/guide/coverage.html)** - Coverage report generation
+- **[@testing-library/user-event](https://testing-library.com/docs/user-event/intro/)** - Advanced simulation of user interactions
 
-### Configuración de Mocks
+### Mock Configuration
 
-El proyecto incluye mocks automatizados para las dependencias principales de Astro:
+The project includes automated mocks for the main Astro dependencies:
 
-- **astro:db** - Mock completo de operaciones de base de datos
-- **astro:actions** - Mock de ActionError y contexto de acciones
-- **astro:transitions/client** - Mock de navegación del lado cliente
-- **Librerías externas** - QR Code generation, Sonner toasts, etc.
+- **astro:db** - Complete mock of database operations
+- **astro:actions** - Mock of ActionError and action context
+- **astro:transitions/client** - Mock of client-side navigation
+- **External libraries** - QR Code generation, Sonner toasts, etc.
 
-## 📁 Estructura de Testing
+## 📁 Testing Structure
 
-### Organización de Archivos
+### File Organization
 
-El proyecto utiliza una estructura plana en el directorio `/test` para facilitar la navegación:
+The project uses a flat structure in the `/test` directory to facilitate navigation:
 
 ```
 test/
-├── components/          # Tests de componentes React
-├── services/           # Tests de lógica de negocio
-├── schemas/            # Tests de validación Zod
-├── helpers/            # Tests de funciones utilitarias
-├── middleware.test.ts  # Tests de middleware de rutas
-├── setup.ts           # Configuración global
-├── utils.tsx          # Utilidades de testing
-└── __mocks__/         # Mocks de dependencias Astro
+├── components/          # React component tests
+├── services/           # Business logic tests
+├── schemas/            # Zod validation tests
+├── helpers/            # Utility function tests
+├── middleware.test.ts  # Route middleware tests
+├── setup.ts           # Global configuration
+├── utils.tsx          # Testing utilities
+└── __mocks__/         # Astro dependency mocks
 ```
 
-### Categorías de Testing
+### Testing Categories
 
-#### 🧩 [Componentes React](./test/components/)
+#### 🧩 [React Components](./test/components/)
 
-Cobertura completa de la interfaz de usuario incluyendo:
+Complete coverage of the user interface including:
 
-- Renderizado y props
-- Interacciones de usuario
-- Validación de formularios
-- Accesibilidad (ARIA, keyboard navigation)
-- Casos edge y manejo de errores
+- Rendering and props
+- User interactions
+- Form validation
+- Accessibility (ARIA, keyboard navigation)
+- Edge cases and error handling
 
-#### 🔧 [Servicios de Negocio](./test/services/)
+#### 🔧 [Business Services](./test/services/)
 
-Testing de la lógica principal de la aplicación:
+Testing of the main application logic:
 
-- CRUD operations para enlaces
-- Lógica de acortamiento de URLs
-- Paginación y filtrado
-- Manejo de errores y casos edge
+- CRUD operations for links
+- URL shortening logic
+- Pagination and filtering
+- Error handling and edge cases
 
-#### 📊 [Validación de Esquemas](./test/schemas/)
+#### 📊 [Schema Validation](./test/schemas/)
 
-Testing completo de validación Zod:
+Complete testing of Zod validation:
 
-- Validación de formularios
-- Validación de acciones del servidor
-- Esquemas de filtrado
-- Casos válidos e inválidos
+- Form validation
+- Server action validation
+- Filtering schemas
+- Valid and invalid cases
 
-#### ⚙️ [Funciones Utilitarias](./test/helpers/)
+#### ⚙️ [Utility Functions](./test/helpers/)
 
-Testing de helpers y funciones de soporte:
+Testing of helpers and support functions:
 
-- Manipulación de clases CSS
-- Extracción de dominios
-- Formateo de fechas
-- Funciones auxiliares
+- CSS class manipulation
+- Domain extraction
+- Date formatting
+- Auxiliary functions
 
 #### 🔗 [Middleware](./test/middleware.test.ts)
 
-Testing del middleware de routing:
+Testing of routing middleware:
 
-- Extracción de slugs de URL
-- Redirección de enlaces
-- Incremento de contadores de clicks
-- Manejo de URLs malformadas
+- URL slug extraction
+- Link redirection
+- Click counter increment
+- Handling of malformed URLs
 
-## 📝 Comandos Disponibles
+## 📝 Available Commands
 
-### Ejecución de Tests
+### Running Tests
 
 ```bash
-# Ejecutar tests en modo watch (desarrollo)
+# Run tests in watch mode (development)
 pnpm test
 
-# Ejecutar todos los tests una vez
+# Run all tests once
 pnpm test:run
 
-# Ejecutar tests con reporte de cobertura
+# Run tests with coverage report
 pnpm test:coverage
 
-# Abrir interfaz web de Vitest
+# Open Vitest web interface
 pnpm test:ui
 
-# Ejecutar tests en modo watch explícito
+# Run tests in explicit watch mode
 pnpm test:watch
 ```
 
-### Comandos Útiles para Desarrollo
+### Useful Commands for Development
 
 ```bash
-# Ejecutar test específico
-pnpm test nombre-del-archivo
+# Run specific test
+pnpm test file-name
 
-# Ejecutar con más información de debug
+# Run with more debug information
 pnpm test --reporter=verbose
 
-# Ejecutar sin cobertura (más rápido en desarrollo)
+# Run without coverage (faster in development)
 pnpm test --no-coverage
 ```
 
-## 🎯 Configuración de Cobertura
+## 🎯 Coverage Configuration
 
-### Umbrales Establecidos
+### Established Thresholds
 
-El proyecto mantiene umbrales de cobertura del **80%** en:
+The project maintains coverage thresholds of **80%** in:
 
-- Líneas de código (lines)
-- Funciones (functions)
+- Lines of code (lines)
+- Functions (functions)
 - Branches (branches)
 - Statements (statements)
 
-### Archivos Excluidos
+### Excluded Files
 
-La configuración excluye automáticamente:
+The configuration automatically excludes:
 
-- Archivos de configuración y build
-- Archivos de test (`.test.ts`, `.test.tsx`)
-- Definiciones de tipos (`.d.ts`)
-- Archivos de seed de base de datos
-- Directorio `coverage/`
+- Configuration and build files
+- Test files (`.test.ts`, `.test.tsx`)
+- Type definitions (`.d.ts`)
+- Database seed files
+- `coverage/` directory
 
-### Reportes Generados
+### Generated Reports
 
-Los reportes de cobertura se generan en:
+Coverage reports are generated in:
 
-- **Terminal:** Resumen visual inmediato
-- **HTML:** Reporte detallado en `./coverage/index.html`
-- **LCOV:** Para integración con herramientas CI/CD
+- **Terminal:** Immediate visual summary
+- **HTML:** Detailed report in `./coverage/index.html`
+- **LCOV:** For integration with CI/CD tools
 
-## 🛠 Configuración Técnica
+## 🛠 Technical Configuration
 
-### Archivo de Configuración Principal
+### Main Configuration File
 
-- **[vitest.config.ts](./vitest.config.ts)** - Configuración principal usando `getViteConfig()` de Astro
+- **[vitest.config.ts](./vitest.config.ts)** - Main configuration using Astro's `getViteConfig()`
 
-### Configuración de Testing
+### Testing Configuration
 
-- **[test/setup.ts](./test/setup.ts)** - Setup global de Jest-DOM y mocks
-- **[test/utils.tsx](./test/utils.tsx)** - Utilidades personalizadas para testing
-- **[test/vitest-setup.d.ts](./test/vitest-setup.d.ts)** - Definiciones de tipos
+- **[test/setup.ts](./test/setup.ts)** - Global setup for Jest-DOM and mocks
+- **[test/utils.tsx](./test/utils.tsx)** - Custom testing utilities
+- **[test/vitest-setup.d.ts](./test/vitest-setup.d.ts)** - Type definitions
 
-### Mocks de Astro
+### Astro Mocks
 
-- **[test/**mocks**/astro-db.mock.ts](./test/**mocks**/astro-db.mock.ts)** - Mock de operaciones de base de datos
-- **[test/**mocks**/astro-actions.mock.ts](./test/**mocks**/astro-actions.mock.ts)** - Mock de acciones del servidor
+- **[test/**mocks**/astro-db.mock.ts](./test/__mocks__/astro-db.mock.ts)** - Mock of database operations
+- **[test/**mocks**/astro-actions.mock.ts](./test/__mocks__/astro-actions.mock.ts)** - Mock of server actions
 
-## 📋 Patrones y Buenas Prácticas
+## 📋 Patterns and Best Practices
 
-### Estructura de Tests Recomendada
+### Recommended Test Structure
 
-Cada archivo de test sigue una estructura consistente:
+Each test file follows a consistent structure:
 
-1. **Rendering** - Tests básicos de renderizado
-2. **User Interactions** - Tests de interacciones del usuario
-3. **Business Logic** - Tests de lógica específica
-4. **Accessibility** - Tests de accesibilidad
-5. **Edge Cases** - Tests de casos límite
-6. **Error Handling** - Tests de manejo de errores
+1. **Rendering** - Basic rendering tests
+2. **User Interactions** - User interaction tests
+3. **Business Logic** - Specific logic tests
+4. **Accessibility** - Accessibility tests
+5. **Edge Cases** - Boundary case tests
+6. **Error Handling** - Error handling tests
 
-### Nomenclatura
+### Nomenclature
 
-- Archivos de test: `ComponentName.test.tsx` o `serviceName.test.ts`
-- Describe blocks: Nombres descriptivos del componente o funcionalidad
-- Test cases: Descripciones claras de lo que se está testando
+- Test files: `ComponentName.test.tsx` or `serviceName.test.ts`
+- Describe blocks: Descriptive names of the component or functionality
+- Test cases: Clear descriptions of what is being tested
 
-### Limpieza y Setup
+### Cleanup and Setup
 
-- Uso consistente de `beforeEach()` para limpiar mocks
-- Setup de user events con `userEvent.setup()`
-- Manejo adecuado de operaciones asíncronas con `waitFor()`
+- Consistent use of `beforeEach()` to clear mocks
+- Setup of user events with `userEvent.setup()`
+- Proper handling of asynchronous operations with `waitFor()`
 
-## 🔧 Integración con Desarrollo
+## 🔧 Integration with Development
 
-### Extensiones VS Code Recomendadas
+### Recommended VS Code Extensions
 
-- **[Vitest](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer)** - Ejecutar tests desde el editor
-- **[Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)** - Mostrar errores inline
-- **[Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)** - Syntax highlighting para tests
+- **[Vitest](https://marketplace.visualstudio.com/items?itemName=ZixuanChen.vitest-explorer)** - Run tests from the editor
+- **[Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)** - Display errors inline
+- **[Jest](https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest)** - Syntax highlighting for tests
 
-### Workflow de Desarrollo
+### Development Workflow
 
-1. **Watch Mode:** Ejecutar `pnpm test` durante desarrollo para feedback inmediato
-2. **UI Mode:** Usar `pnpm test:ui` para debugging visual de tests
-3. **Coverage:** Ejecutar `pnpm test:coverage` antes de commits importantes
-4. **CI/CD:** Tests automáticos en pipeline con `pnpm test:run`
+1. **Watch Mode:** Run `pnpm test` during development for immediate feedback
+2. **UI Mode:** Use `pnpm test:ui` for visual test debugging
+3. **Coverage:** Run `pnpm test:coverage` before important commits
+4. **CI/CD:** Automatic tests in pipeline with `pnpm test:run`
 
-## 🔍 Debugging y Resolución de Problemas
+## 🔍 Debugging and Troubleshooting
 
-### Problemas Comunes
+### Common Issues
 
-#### Tests Lentos
+#### Slow Tests
 
-- Usar `--no-coverage` durante desarrollo activo
-- Ejecutar tests específicos en lugar de toda la suite
-- Verificar que no hay tests con timeouts excesivos
+- Use `--no-coverage` during active development
+- Run specific tests instead of the entire suite
+- Verify there are no tests with excessive timeouts
 
-#### Errores de Import
+#### Import Errors
 
-- Los mocks de Astro (`astro:db`, `astro:actions`) están configurados automáticamente
-- Verificar que los mocks se declaren antes de las importaciones
-- Revisar alias de paths en configuración de Vitest
+- Astro mocks (`astro:db`, `astro:actions`) are configured automatically
+- Verify that mocks are declared before imports
+- Check path aliases in Vitest configuration
 
-#### Mocks No Funcionan
+#### Mocks Not Working
 
-- Asegurar que `vi.clearAllMocks()` se llame en `beforeEach()`
-- Verificar que los mocks se definan antes de importar los módulos
-- Usar `vi.mocked()` para tipado correcto de mocks
+- Ensure `vi.clearAllMocks()` is called in `beforeEach()`
+- Verify that mocks are defined before importing modules
+- Use `vi.mocked()` for correct typing of mocks
 
-### Comandos de Debug
+### Debug Commands
 
 ```bash
-# Ver información detallada de un test específico
-pnpm test --reporter=verbose nombre-del-test
+# View detailed information for a specific test
+pnpm test --reporter=verbose test-name
 
-# Ejecutar en modo debug
+# Run in debug mode
 pnpm test --inspect-brk
 
-# Ver solo tests que fallan
+# View only failing tests
 pnpm test --reporter=verbose --run
 ```
 
-## 📚 Recursos y Referencias
+## 📚 Resources and References
 
-### Documentación Principal
+### Main Documentation
 
-- **[Vitest Documentation](https://vitest.dev/)** - Framework de testing
-- **[Testing Library](https://testing-library.com/)** - Filosofía y APIs de testing
-- **[Astro Testing Guide](https://docs.astro.build/en/guides/testing/)** - Testing específico para Astro
+- **[Vitest Documentation](https://vitest.dev/)** - Testing framework
+- **[Testing Library](https://testing-library.com/)** - Testing philosophy and APIs
+- **[Astro Testing Guide](https://docs.astro.build/en/guides/testing/)** - Astro-specific testing
 
-### Recursos Adicionales
+### Additional Resources
 
-- **[Jest DOM Matchers](https://github.com/testing-library/jest-dom)** - Matchers adicionales para DOM
-- **[User Event API](https://testing-library.com/docs/user-event/intro/)** - Simulación de eventos de usuario
-- **[MSW (Mock Service Worker)](https://mswjs.io/)** - Para mocking de APIs (futuro)
+- **[Jest DOM Matchers](https://github.com/testing-library/jest-dom)** - Additional DOM matchers
+- **[User Event API](https://testing-library.com/docs/user-event/intro/)** - User event simulation
+- **[MSW (Mock Service Worker)](https://mswjs.io/)** - For API mocking (future)
 
-## 📈 Métricas y Estadísticas
+## 📈 Metrics and Statistics
 
-### Distribución Actual de Tests
+### Current Test Distribution
 
-- **Componentes React:** 48% (102 tests)
+- **React Components:** 48% (102 tests)
 - **Middleware:** 11% (24 tests)
 - **Schemas:** 13% (27 tests)
-- **Servicios:** 11% (24 tests)
-- **Utilidades:** 8% (18 tests)
-- **Infraestructura:** 9% (18 tests)
+- **Services:** 11% (24 tests)
+- **Utilities:** 8% (18 tests)
+- **Infrastructure:** 9% (18 tests)
 
-### Objetivos de Calidad
+### Quality Objectives
 
-- ✅ **Cobertura:** Mantener >80% en todas las métricas
-- ✅ **Performance:** Tests ejecutándose en <20 segundos
-- ✅ **Estabilidad:** 100% de tests pasando en main branch
-- ✅ **Mantenibilidad:** Estructura clara y documentada
+- ✅ **Coverage:** Maintain >80% in all metrics
+- ✅ **Performance:** Tests running in <20 seconds
+- ✅ **Stability:** 100% passing tests in main branch
+- ✅ **Maintainability:** Clear and documented structure
 
 ---
 
-**Última actualización:** Septiembre 2025  
-**Mantenido por:** BRé [breimerct@gmail.com](mailto:breimerct@gmail.com)
+**Last updated:** September 2025  
+**Maintained by:** BRé [breimerct@gmail.com](mailto:breimerct@gmail.com)
