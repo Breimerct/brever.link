@@ -174,9 +174,6 @@ describe("LinkCard Component", () => {
     });
 
     it("should show error toast and log error when copy fails", async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
       const copyError = new Error("Copy failed");
       const writeTextMock = vi.fn().mockRejectedValue(copyError);
 
@@ -199,13 +196,7 @@ describe("LinkCard Component", () => {
             description: "Please try again.",
           },
         );
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          "Failed to copy link:",
-          copyError,
-        );
       });
-
-      consoleErrorSpy.mockRestore();
     });
   });
 

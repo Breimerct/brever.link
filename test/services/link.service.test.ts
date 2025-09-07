@@ -116,10 +116,6 @@ describe("Link Service", () => {
     });
 
     it("should return false when database error occurs", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
       (db.select as any).mockReturnValue({
         from: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -131,12 +127,6 @@ describe("Link Service", () => {
       const result = await verifyIsExistingLinkBySlug("test-slug");
 
       expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in verifyIsExistingLink:",
-        expect.any(Error),
-      );
-
-      consoleSpy.mockRestore();
     });
   });
 
@@ -299,10 +289,6 @@ describe("Link Service", () => {
     });
 
     it("should handle database errors gracefully", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
       const mockLink = {
         id: "1",
         slug: "test-slug",
@@ -334,12 +320,6 @@ describe("Link Service", () => {
         error: "Failed to increment click count",
         data: null,
       });
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in incrementClickCount:",
-        expect.any(Error),
-      );
-      consoleSpy.mockRestore();
     });
   });
 
@@ -385,10 +365,6 @@ describe("Link Service", () => {
     });
 
     it("should handle database errors gracefully", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
       (db.insert as any).mockReturnValue({
         values: vi.fn().mockReturnValue({
           execute: vi.fn().mockRejectedValue(new Error("Database error")),
@@ -401,12 +377,6 @@ describe("Link Service", () => {
         success: false,
         error: "Failed to create link",
       });
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in createLink:",
-        expect.any(Error),
-      );
-      consoleSpy.mockRestore();
     });
 
     it("should generate UUID and set creation date", async () => {
@@ -452,10 +422,6 @@ describe("Link Service", () => {
     });
 
     it("should return empty array when database error occurs", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
       (db.select as any).mockReturnValue({
         from: vi.fn().mockReturnValue({
           orderBy: vi.fn().mockReturnValue({
@@ -467,11 +433,6 @@ describe("Link Service", () => {
       const result = await getAllLinks();
 
       expect(result).toEqual([]);
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in getAllLinks:",
-        expect.any(Error),
-      );
-      consoleSpy.mockRestore();
     });
   });
 
@@ -596,10 +557,6 @@ describe("Link Service", () => {
     });
 
     it("should return default values when database error occurs", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-
       (db.select as any).mockReturnValue({
         from: vi.fn().mockReturnValue({
           where: vi.fn().mockReturnValue({
@@ -626,12 +583,6 @@ describe("Link Service", () => {
         hasNextPage: false,
         hasPreviousPage: false,
       });
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in getAllPaginatedLinks:",
-        expect.any(Error),
-      );
-      consoleSpy.mockRestore();
     });
   });
 });

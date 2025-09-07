@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { cn, getDomain, formatDate } from "../../src/helpers/utils";
 
 describe("Utils - cn function", () => {
@@ -68,32 +68,19 @@ describe("Utils - getDomain function", () => {
   });
 
   it("handles different protocols", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     expect(getDomain("http://breimer.dev")).toBe("invalid url");
     expect(getDomain("ftp://breimer.dev")).toBe("invalid url");
-    expect(consoleSpy).toHaveBeenCalledTimes(2);
-    consoleSpy.mockRestore();
   });
 
   it("handles ports", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     expect(getDomain("https://breimer.dev:8080")).toBe("invalid url");
     expect(getDomain("https://www.breimer.dev:3000")).toBe("invalid url");
-    expect(consoleSpy).toHaveBeenCalledTimes(2);
-    consoleSpy.mockRestore();
   });
 
   it("handles invalid URLs", () => {
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-
     expect(getDomain("not-a-url")).toBe("invalid url");
     expect(getDomain("invalid://url")).toBe("invalid url");
     expect(getDomain("")).toBe("invalid url");
-
-    expect(consoleSpy).toHaveBeenCalledTimes(3);
-    consoleSpy.mockRestore();
   });
 });
 

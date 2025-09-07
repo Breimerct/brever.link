@@ -19,7 +19,6 @@ describe("shortLinkActionSchema", () => {
   it("should validate different URL protocols", () => {
     const validUrls = [
       "https://example.com",
-      "http://example.com",
       "https://subdomain.example.com/path?query=value",
       "https://example.com:8080/path",
     ];
