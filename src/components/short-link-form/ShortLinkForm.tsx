@@ -8,8 +8,10 @@ import { actions } from "astro:actions";
 import { navigate } from "astro/virtual-modules/transitions-router.js";
 import { shortLinkFormSchema } from "@/schemas";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export default function ShortLinkForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<CreateLinkAction>({
     resolver: zodResolver(shortLinkFormSchema),
     mode: "onChange",
@@ -23,17 +25,23 @@ export default function ShortLinkForm() {
   };
 
   const handleSubmit = methods.handleSubmit(async (data) => {
-    const response = await actions.shortenAction.shortenLink(data);
+    try {
+      setIsLoading(true);
+      const response = await actions.shortenAction.shortenLink(data);
 
-    if (response.error) {
-      toast.error(response.error.message, {
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      methods.reset();
+      navigate("/", { history: "push" });
+    } catch (error) {
+      toast.error((error as Error).message || "Something went wrong", {
         description: "Please check the data and try again.",
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    methods.reset();
-    navigate("/", { history: "push" });
   });
 
   return (
@@ -77,6 +85,7 @@ export default function ShortLinkForm() {
 
             <div>
               <Button
+                disabled={isLoading}
                 data-testid="randomize-slug-button"
                 className="mt-4"
                 type="button"
@@ -91,6 +100,7 @@ export default function ShortLinkForm() {
         </fieldset>
 
         <Button
+          isLoading={isLoading}
           data-testid="short-link-form-submit"
           className="mt-2"
           type="submit"
