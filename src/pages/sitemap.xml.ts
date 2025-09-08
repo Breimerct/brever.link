@@ -1,61 +1,71 @@
 import type { APIRoute } from "astro";
 import { getAllPaginatedLinks } from "@/services/link.service";
 
+function createSitemapContent(content: string = "") {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${content}
+</urlset>`;
+}
+
+function createUrlEntry(
+  loc: string,
+  lastmod: string,
+  changefreq: string,
+  priority: string,
+) {
+  return `
+  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+}
+
 export const GET: APIRoute = async () => {
+  const baseUrl = "https://brever.link";
+  const lastmod = new Date().toISOString().split("T")[0] + "T00:00:00+00:00";
+
   try {
-    // Get total number of pages by fetching with a large page size to count total
-    const { totalPages } = await getAllPaginatedLinks(1, 4, "");
+    const {
+      data: { totalPages },
+    } = await getAllPaginatedLinks({
+      page: 1,
+      limit: 4,
+      slug: "",
+    });
 
-    const baseUrl = "https://brever.link";
-    const lastmod = new Date().toISOString().split("T")[0] + "T00:00:00+00:00";
+    let urlEntry = createUrlEntry(`${baseUrl}/`, lastmod, "daily", "1.0");
 
-    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-                    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-                    <!-- Main page -->
-                    <url>
-                        <loc>${baseUrl}/</loc>
-                        <lastmod>${lastmod}</lastmod>
-                        <changefreq>daily</changefreq>
-                        <priority>1.0</priority>
-                    </url>`;
-
-    // Add paginated pages
-    for (let page = 1; page <= totalPages; page++) {
-      sitemap += `
-            <url>
-                <loc>${baseUrl}/?page=${page}</loc>
-                <lastmod>${lastmod}</lastmod>
-                <changefreq>daily</changefreq>
-                <priority>${page === 1 ? "0.9" : "0.7"}</priority>
-            </url>
-        `;
+    for (const page of Array.from({ length: totalPages })) {
+      urlEntry += createUrlEntry(
+        `${baseUrl}/?page=${page}`,
+        lastmod,
+        "daily",
+        page === 1 ? "0.9" : "0.7",
+      );
     }
 
-    sitemap += `
-</urlset>`;
+    const sitemapContent = createSitemapContent(urlEntry);
 
-    return new Response(sitemap, {
+    return new Response(sitemapContent, {
       status: 200,
       headers: {
         "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=3600", // Cache for 1 hour
+        "Cache-Control": "public, max-age=3600",
       },
     });
-  } catch (error) {
-    console.error("Error generating sitemap:", error);
+  } catch {
+    const defaultSitemapEntry = createUrlEntry(
+      baseUrl,
+      lastmod,
+      "daily",
+      "1.0",
+    );
+    const defaultSitemapContent = createSitemapContent(defaultSitemapEntry);
 
-    // Fallback sitemap
-    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://brever.link/</loc>
-    <lastmod>${new Date().toISOString().split("T")[0]}T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`;
-
-    return new Response(fallbackSitemap, {
+    return new Response(defaultSitemapContent, {
       status: 200,
       headers: {
         "Content-Type": "application/xml",

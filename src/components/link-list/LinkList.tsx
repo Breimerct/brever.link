@@ -7,14 +7,17 @@ interface Props {
 
 export default function LinkList({ links }: Props) {
   return (
-    <>
-      <div className="w-full">
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-          {links.map((link) => (
-            <LinkCard key={link.id} link={link} className="col-span-1" />
-          ))}
-        </ul>
-      </div>
-    </>
+    <section className="w-full">
+      <ul
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4"
+        role="list"
+      >
+        {links.map((link) => (
+          <li key={link.id} className="col-span-1">
+            <LinkCard link={link} />
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

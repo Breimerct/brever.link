@@ -6,10 +6,18 @@ interface Props {
   totalPages: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  urlPattern?: string;
 }
 
-const { currentPage, totalPages, hasPreviousPage, hasNextPage } = Astro.props;
+const {
+  currentPage,
+  totalPages,
+  hasPreviousPage,
+  hasNextPage,
+  urlPattern = "/?page=",
+} = Astro.props;
 
+// Pagination logic (unchanged)
 const MAX_VISIBLE_PAGES = 6;
 const DOTS_THRESHOLD = 3;
 const RANGE_PADDING = 1;
@@ -17,6 +25,8 @@ const MIN_RANGE_START = 2;
 const END_MARGIN = 2;
 
 const getPageNumbers = () => {
+  // Same logic as before
+  // ...
   const pageNumbers: { type: "page" | "dots"; number: number }[] = [];
 
   if (totalPages <= MAX_VISIBLE_PAGES) {
@@ -59,34 +69,55 @@ const getPageNumbers = () => {
 const pageNumbers = getPageNumbers();
 ---
 
-<div class="w-full flex items-center justify-center my-4">
-  <ul class="flex items-center -space-x-px h-8 text-sm">
+<nav aria-label="Pagination" class="my-4">
+  <ul class="flex items-center justify-center -space-x-px h-8 text-sm">
     <li>
-      <a
-        href={`/?page=${currentPage - 1}`}
-        class={cn(
-          "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
-          {
-            "cursor-not-allowed pointer-events-none": !hasPreviousPage,
-          },
-        )}
-      >
-        <span class="sr-only">Previous</span>
-        <svg
-          class="w-2.5 h-2.5 rtl:rotate-180"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 6 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5 1 1 5l4 4"></path>
-        </svg>
-      </a>
+      {
+        hasPreviousPage ? (
+          <a
+            href={`${urlPattern}${currentPage - 1}`}
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            aria-label="Go to previous page"
+          >
+            <svg
+              class="w-2.5 h-2.5 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 1 1 5l4 4"
+              />
+            </svg>
+          </a>
+        ) : (
+          <span
+            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-400 bg-white border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600"
+            aria-disabled="true"
+          >
+            <svg
+              class="w-2.5 h-2.5 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 1 1 5l4 4"
+              />
+            </svg>
+          </span>
+        )
+      }
     </li>
 
     {
@@ -96,18 +127,12 @@ const pageNumbers = getPageNumbers();
         if (item.type === "dots") {
           return (
             <li>
-              <a
-                href={`/?page=${pageNumber}`}
-                class={cn(
-                  "flex items-center justify-center px-3 h-8 leading-tight",
-                  "text-gray-500 bg-white border border-gray-300",
-                  "hover:bg-gray-100 hover:text-gray-700",
-                  "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400",
-                  "dark:hover:bg-gray-700 dark:hover:text-white",
-                )}
+              <span
+                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400"
+                aria-hidden="true"
               >
-                ...
-              </a>
+                &hellip;
+              </span>
             </li>
           );
         }
@@ -115,21 +140,14 @@ const pageNumbers = getPageNumbers();
         return (
           <li>
             <a
-              href={`/?page=${pageNumber}`}
+              href={`${urlPattern}${pageNumber}`}
               class={cn(
-                "flex items-center justify-center px-3 h-8 leading-tight",
-                "text-gray-500 bg-white border border-gray-300",
-                "hover:bg-gray-100 hover:text-gray-700",
-                "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400",
-                "dark:hover:bg-gray-700 dark:hover:text-white",
-                {
-                  "!bg-gray-100 text-gray-700": pageNumber === currentPage,
-                  "dark:!bg-gray-700 dark:!text-white":
-                    pageNumber === currentPage,
-                  "pointer-events-none cursor-not-allowed":
-                    pageNumber === currentPage,
-                },
+                "flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
+                pageNumber === currentPage
+                  ? "z-10 text-gray-800 font-semibold bg-gray-200 border-slate-300 cursor-default dark:bg-gray-700 dark:text-white"
+                  : "text-gray-500 bg-white dark:bg-gray-800"
               )}
+              aria-label={`Go to page ${pageNumber}`}
             >
               {pageNumber}
             </a>
@@ -139,31 +157,52 @@ const pageNumbers = getPageNumbers();
     }
 
     <li>
-      <a
-        href={`/?page=${currentPage + 1}`}
-        class={cn(
-          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
-          {
-            "cursor-not-allowed pointer-events-none": !hasNextPage,
-          },
-        )}
-      >
-        <span class="sr-only">Next</span>
-        <svg
-          class="w-2.5 h-2.5 rtl:rotate-180"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 6 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="m1 9 4-4-4-4"></path>
-        </svg>
-      </a>
+      {
+        hasNextPage ? (
+          <a
+            href={`${urlPattern}${currentPage + 1}`}
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            aria-label="Go to next page"
+          >
+            <svg
+              class="w-2.5 h-2.5 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 9 4-4-4-4"
+              />
+            </svg>
+          </a>
+        ) : (
+          <span
+            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-400 bg-white border border-gray-300 rounded-e-lg cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600"
+            aria-disabled="true"
+          >
+            <svg
+              class="w-2.5 h-2.5 rtl:rotate-180"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 6 10"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m1 9 4-4-4-4"
+              />
+            </svg>
+          </span>
+        )
+      }
     </li>
   </ul>
-</div>
+</nav>

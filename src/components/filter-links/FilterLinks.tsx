@@ -61,16 +61,35 @@ export default function FilterLinks() {
 
   return (
     <>
-      <FormProvider {...methods}>
-        <form onSubmit={onSubmit} className="mb-4">
-          <Input
-            name="search"
-            label="Slug"
-            placeholder="Search by slug"
-            autoComplete="off"
-          />
-        </form>
-      </FormProvider>
+      <div className="search-container">
+        <FormProvider {...methods}>
+          <form
+            onSubmit={onSubmit}
+            className="mb-4"
+            role="search"
+            aria-label="Filter links by slug"
+          >
+            <fieldset>
+              <legend className="sr-only">Search links</legend>
+              <div className="search-field-container">
+                <Input
+                  name="search"
+                  label="Slug"
+                  placeholder="Search by slug"
+                  autoComplete="off"
+                  aria-describedby="search-description"
+                />
+                <span id="search-description" className="sr-only">
+                  Enter text to filter links by slug
+                </span>
+              </div>
+              <button type="submit" className="sr-only" aria-label="Search">
+                Search
+              </button>
+            </fieldset>
+          </form>
+        </FormProvider>
+      </div>
     </>
   );
 }

@@ -10,7 +10,11 @@ import { shortLinkFormSchema } from "@/schemas";
 import { toast } from "sonner";
 import { useState } from "react";
 
-export default function ShortLinkForm() {
+interface Props {
+  isFocusForm?: boolean;
+}
+
+export default function ShortLinkForm({ isFocusForm }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<CreateLinkAction>({
     resolver: zodResolver(shortLinkFormSchema),
@@ -59,6 +63,7 @@ export default function ShortLinkForm() {
             <Input
               required
               id="url"
+              role="textbox"
               label="URL"
               name="url"
               type="url"
@@ -66,6 +71,7 @@ export default function ShortLinkForm() {
               data-testid="url-input"
               aria-required="true"
               autoComplete="off"
+              autoFocus={isFocusForm}
             />
           </div>
         </fieldset>
@@ -76,6 +82,7 @@ export default function ShortLinkForm() {
             <div className="flex-1">
               <Input
                 required
+                role="textbox"
                 data-testid="slug-input"
                 autoComplete="off"
                 id="slug"
@@ -83,6 +90,7 @@ export default function ShortLinkForm() {
                 name="slug"
                 type="text"
                 placeholder="example"
+                aria-required="true"
               />
             </div>
 
@@ -107,6 +115,8 @@ export default function ShortLinkForm() {
           className="mt-2"
           type="submit"
           fullWidth
+          aria-label="Shorten URL"
+          role="button"
         >
           Short it
         </Button>

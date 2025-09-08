@@ -21,7 +21,6 @@ const isValidPage = !isNaN(Number(page)) && Number(page) > 0;
 
 if (!isValidPage) {
   const redirectUrl = search ? `/?page=1&search=${search}` : "/?page=1";
-
   return Astro.redirect(redirectUrl);
 }
 
@@ -41,75 +40,81 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } = data;
     <Header />
 
     <div class="w-full flex flex-col lg:flex-row lg:gap-8 justify-between">
-      <div
+      <section
+        aria-labelledby="form-section"
         class="p-8 w-full h-full max-w-xl mx-auto shadow-md flex flex-col gap-6 rounded-md bg-slate-50 dark:bg-slate-700"
       >
-        <div class="w-full flex justify-end items-center gap-5">
+        <nav class="w-full flex justify-end items-center gap-5">
           <a
+            aria-label="Buy me a coffee"
             href="https://buymeacoffee.com/breimercts"
             class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 dark:text-slate-400 text-sm font-semibold transition-all hover:scale-110"
             target="_blank"
             rel="noopener noreferrer"
-            title="Buy me a coffee"
           >
-            <Bmc class="size-7" />
+            <Bmc class="size-7" aria-label="Buy me a coffee icon" />
           </a>
 
           <a
+            aria-label="GitHub Repository"
             href="https://github.com/Breimerct/brever.link"
             class="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 dark:text-slate-400 text-sm font-semibold transition-all hover:scale-110"
             target="_blank"
             rel="noopener noreferrer"
-            title="GitHub Repository"
           >
-            <LightGitHub class="size-7 dark:hidden" />
-            <DarkGitHub class="hidden dark:block size-7" />
+            <LightGitHub
+              class="size-7 dark:hidden"
+              aria-label="GitHub icon light"
+            />
+            <DarkGitHub
+              class="hidden dark:block size-7"
+              aria-label="GitHub icon dark"
+            />
           </a>
 
           <div transition:persist>
             <ToggleDarkMode />
           </div>
-        </div>
+        </nav>
 
-        <div>
-          <ShortLinkForm client:only="react" />
-        </div>
-      </div>
+        <h2 id="form-section" class="sr-only">Create Short Link</h2>
+        <ShortLinkForm isFocusForm={!search} client:only="react" />
+      </section>
 
-      <section class="w-full my-8 lg:mt-0">
-        <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
+      <section aria-labelledby="links-heading" class="w-full my-8 lg:mt-0">
+        <h1 id="links-heading" class="text-2xl font-bold mb-4">
+          Your Short Links
+        </h1>
 
         {
           !error && !links.length && (
-            <>
-              <div class="text-center mt-10">
-                <h4 class="text-slate-500 text-3xl font-bold">
-                  No short links found.
-                  <br /> Create one above!
-                </h4>
-              </div>
-            </>
+            <article class="text-center mt-10">
+              <h2 class="text-slate-500 text-3xl font-bold">
+                No short links found.
+                <br /> Create one above!
+              </h2>
+            </article>
           )
         }
 
         {
           error && (
-            <div class="text-center mt-10 flex flex-col items-center gap-4">
-              <h4 class="text-red-400/80 text-2xl font-bold">
+            <article class="text-center mt-10 flex flex-col items-center gap-4">
+              <h2 class="text-red-400/80 text-2xl font-bold">
                 An error occurred while fetching the links.
                 {error && (
                   <>
                     <br /> ({error})
                   </>
                 )}
-              </h4>
+              </h2>
               <a
                 class="mt-4 px-4 py-2 font-bold uppercase bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 rounded hover:bg-slate-300 dark:hover:bg-slate-500 transition"
                 href="/"
               >
                 Reload Page
               </a>
-            </div>
+            </article>
           )
         }
 
@@ -118,12 +123,14 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } = data;
             <>
               <FilterLinks client:only="react" transition:persist />
               <LinkList links={links} client:only="react" />
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                hasNextPage={hasNextPage}
-                hasPreviousPage={hasPreviousPage}
-              />
+              <nav aria-label="Pagination">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  hasNextPage={hasNextPage}
+                  hasPreviousPage={hasPreviousPage}
+                />
+              </nav>
             </>
           )
         }
@@ -138,6 +145,8 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } = data;
   const createLoader = () => {
     const loader = document.createElement("div");
     loader.id = "page-loader";
+    loader.setAttribute("aria-label", "Page loading");
+    loader.setAttribute("role", "progressbar");
     loader.classList.add(
       "fixed",
       "top-0",
@@ -146,7 +155,7 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } = data;
       "h-1",
       "bg-slate-700",
       "z-50",
-      "dark:bg-slate-500",
+      "dark:bg-slate-500"
     );
     loader.style.animation = "loading 1.5s infinite ease-in-out";
 
