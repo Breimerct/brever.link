@@ -8,6 +8,10 @@ vi.mock("../../src/services/link.service", () => ({
   createNewLink: vi.fn(),
 }));
 
+vi.mock("../../src/helpers", () => ({
+  validateUrl: vi.fn(),
+}));
+
 vi.mock("qrcode", () => ({
   default: {
     toDataURL: vi.fn().mockResolvedValue("data:image/png;base64,mock-qr-code"),
@@ -18,9 +22,11 @@ import {
   verifyIsExistingLinkBySlug,
   createNewLink,
 } from "../../src/services/link.service";
+import { validateUrl } from "../../src/helpers";
 
 const mockVerifyIsExistingLinkBySlug = vi.mocked(verifyIsExistingLinkBySlug);
 const mockCreateNewLink = vi.mocked(createNewLink);
+const mockValidateUrl = vi.mocked(validateUrl);
 
 describe("shorLink Service", () => {
   const mockContext = {
@@ -37,6 +43,12 @@ describe("shorLink Service", () => {
     mockContext.request.headers.get.mockReturnValue(
       "https://github.com/some-page",
     );
+
+    // Default mock for validateUrl
+    mockValidateUrl.mockReturnValue({
+      isValid: true,
+      normalizedUrl: "https://github.com",
+    });
   });
 
   it("creates a new short link successfully", async () => {
@@ -116,15 +128,58 @@ describe("shorLink Service", () => {
     await expect(shorLink(inputData, mockContext)).rejects.toThrow();
   });
 
-  it("throws error for invalid URL", async () => {
+  it("throws error for invalid URL with specific error message", async () => {
     const inputData = {
       url: "invalid-url",
       slug: "test-slug",
     };
 
+    mockValidateUrl.mockReturnValue({
+      isValid: false,
+      error: "The URL structure is not valid",
+      normalizedUrl: "",
+    });
+
     await expect(shorLink(inputData, mockContext)).rejects.toThrow(ActionError);
     await expect(shorLink(inputData, mockContext)).rejects.toThrow(
       "The URL structure is not valid",
+    );
+  });
+
+  it("throws error with fallback message when validation fails without specific error", async () => {
+    const inputData = {
+      url: "https://example.com",
+      slug: "test-slug",
+    };
+
+    // Mock validateUrl to return isValid: false but error: undefined
+    mockValidateUrl.mockReturnValue({
+      isValid: false,
+      error: undefined,
+      normalizedUrl: "",
+    });
+
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(ActionError);
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(
+      "Invalid URL",
+    );
+  });
+
+  it("throws error with fallback message when createNewLink returns no data and no error", async () => {
+    const inputData = {
+      url: "https://github.com",
+      slug: "test-slug",
+    };
+
+    mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);
+    mockCreateNewLink.mockResolvedValue({
+      data: null,
+      error: null, // No error but also no data
+    });
+
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(ActionError);
+    await expect(shorLink(inputData, mockContext)).rejects.toThrow(
+      "Failed to create link",
     );
   });
 });
