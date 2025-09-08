@@ -44,7 +44,7 @@ const Input: FC<Props> = ({
           className={cn(
             "border-none p-2 w-full rounded-md outline outline-slate-700 hover:outline-slate-600 focus:outline-slate-500 focus:ring-2 focus:ring-slate-500 transition duration-200 ease-in-out text-ellipsis",
             {
-              "!outline-red-500": !!errors[name]?.message,
+              "!outline-red-500 dark:!outline-red-400": !!errors[name]?.message,
               "cursor-not-allowed opacity-50 outline-slate-400/80 !bg-slate-300 dark:!bg-slate-300":
                 disabled,
             },
@@ -56,7 +56,7 @@ const Input: FC<Props> = ({
           {...props}
         />
         {errors[name]?.message && (
-          <span className="text-sm text-red-500 absolute -bottom-5">
+          <span className="text-sm text-red-500 dark:!text-red-400 mt-1.5">
             {errors[name]?.message?.toString() || "This field is required"}
           </span>
         )}

@@ -47,6 +47,7 @@ export default function ShortLinkForm() {
   return (
     <FormProvider {...methods}>
       <form
+        noValidate
         data-testid="short-link-form"
         className="flex flex-col gap-6"
         onSubmit={handleSubmit}
@@ -56,6 +57,7 @@ export default function ShortLinkForm() {
           <legend className="sr-only">URL to shorten</legend>
           <div>
             <Input
+              required
               id="url"
               label="URL"
               name="url"
@@ -70,9 +72,10 @@ export default function ShortLinkForm() {
 
         <fieldset>
           <legend className="sr-only">Custom slug</legend>
-          <div className="flex w-full items-end gap-2">
+          <div className="flex w-full items-start gap-2">
             <div className="flex-1">
               <Input
+                required
                 data-testid="slug-input"
                 autoComplete="off"
                 id="slug"
@@ -83,11 +86,10 @@ export default function ShortLinkForm() {
               />
             </div>
 
-            <div>
+            <div className="self-start !mt-6">
               <Button
                 disabled={isLoading}
                 data-testid="randomize-slug-button"
-                className="mt-4"
                 type="button"
                 id="randomize-slug"
                 onClick={randomizeSlug}
