@@ -14,22 +14,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
     !slug ||
     slug === "/" ||
     slug === "favicon.ico" ||
-    slug === "sitemap.xml"
+    slug === "sitemap.xml" ||
+    slug.trim() === ""
   ) {
     return next();
   }
 
-  if (slug) {
-    const { data: link, error } = await getLinkBySlug(slug);
+  const { data: link, error } = await getLinkBySlug(slug);
 
-    if (error || !link) {
-      return redirect("/");
-    }
-
-    await incrementClickCount(slug);
-
-    return Response.redirect(link.url, 302);
+  if (error || !link) {
+    return redirect("/");
   }
 
-  return next();
+  await incrementClickCount(slug);
+  return Response.redirect(link.url, 302);
 });

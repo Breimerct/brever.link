@@ -541,5 +541,33 @@ describe("Middleware", () => {
       expect(result).toBeInstanceOf(Response);
       expect((result as Response).status).toBe(302);
     });
+
+    it("should call next() for whitespace-only slugs after decoding", async () => {
+      // Test case where slug contains only encoded whitespace characters
+      mockContext.request = new Request("https://example.com/%20%20%20");
+
+      const result = await onRequest(mockContext, mockNext);
+
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockGetLinkBySlug).not.toHaveBeenCalled();
+      expect(result).toBe(await mockNext());
+    });
+
+    it("should handle empty string after URL decoding", async () => {
+      // Mock decodeURIComponent to return empty string
+      const originalDecodeURIComponent = global.decodeURIComponent;
+      global.decodeURIComponent = vi.fn().mockReturnValue("");
+
+      mockContext.request = new Request("https://example.com/%00");
+
+      const result = await onRequest(mockContext, mockNext);
+
+      expect(mockNext).toHaveBeenCalled();
+      expect(mockGetLinkBySlug).not.toHaveBeenCalled();
+      expect(result).toBe(await mockNext());
+
+      // Restore
+      global.decodeURIComponent = originalDecodeURIComponent;
+    });
   });
 });
