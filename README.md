@@ -2,7 +2,7 @@
 
 <!-- add image cover -->
 <figure>
-  <img src="public/app.webp" alt="Cover Image">
+  <img src="public/og.webp" alt="Cover Image">
 </figure>
 
 Application for shortening URLs with QR code generation, click counting, search, and pagination. Built with Astro 5, React, Tailwind CSS 4, and Astro DB, ready to deploy on Netlify.
