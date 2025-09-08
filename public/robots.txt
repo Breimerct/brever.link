@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+
+# Allow crawling of the main page and pagination
+Allow: /$
+Allow: /?page=*
+
+# Allow crawling of static assets
+Allow: /favicon.png
+Allow: /og.webp
+Allow: /img/
+
+# Allow sitemap access
+Allow: /sitemap.xml
+
+# Disallow crawling of short link redirects
+# This prevents bots from following shortened URLs
+Disallow: /[a-zA-Z0-9]*
+
+# Allow search engines to access CSS and JS files
+Allow: /_astro/
+
+# Sitemap location
+Sitemap: https://brever.link/sitemap.xml
+
+# Crawl delay to be respectful to the server
+Crawl-delay: 1
+
+# Specific rules for different search engines
+User-agent: Googlebot
+Crawl-delay: 1
+
+User-agent: Bingbot
+Crawl-delay: 2

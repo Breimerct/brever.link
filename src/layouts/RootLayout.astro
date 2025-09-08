@@ -3,17 +3,18 @@ import { ClientRouter } from "astro:transitions";
 import Toaster from "@components/toaster/Toaster";
 import("@styles/global.css");
 
-const title = "brever.link";
+const title = "Brever.link";
 const siteUrl = "https://brever.link";
-const ogTitle = "Brever.link | Instantly shorten your links with style";
+const ogTitle = "Brever.link | Free URL Shortener with QR Codes";
 const ogDescription =
-  "Brever.link is a fast, secure and minimalist URL shortener. Perfect for social media, marketing and more. Try it for free!";
+  "Create short links instantly with automatic QR code generation and click tracking. Built with Astro 5, React, and Tailwind CSS. Fast, secure, and completely free!";
 const image = `${siteUrl}/og.webp`;
-const imageAlt = "Brever.link - URL shortener with analytics and clean design";
+const imageAlt =
+  "Brever.link - Modern URL shortener with QR codes, analytics dashboard, and clean minimalist design";
 
-const twitterTitle = "Brever.link | Short links, big results";
+const twitterTitle = "Brever.link | Smart URL Shortener with QR Codes";
 const twitterDescription =
-  "Simplify your URLs and share with confidence. Track clicks and optimize your audience.";
+  "Transform long URLs into short links with QR codes. Track clicks, analyze performance, and manage your links with our modern, free URL shortener.";
 ---
 
 <!doctype html>
@@ -23,31 +24,114 @@ const twitterDescription =
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>
-      {title} - A URL shortener
+      {title} | Free URL Shortener with QR Codes
     </title>
 
     <meta
+      name="description"
+      content="Free URL shortener with automatic QR code generation and click tracking. Create custom short links, monitor performance, and manage your URLs with our modern, secure platform built with Astro 5 and React."
+    />
+
+    <meta
       name="keywords"
-      content="url shortener, link shortener, shorten url, shorten link, url shortener with analytics, url shortener free, custom short links, branded links, link management, link tracking, link analytics, url shortening service, short links for social media, breve, breve.link, brever.link, breimer correa"
+      content="url shortener, link shortener, shorten url, qr code generator, link analytics, click tracking, custom short links, free url shortener, link management, social media links, marketing links, astro, react, brever.link, breimer correa, short link generator, url analytics, qr codes"
     />
 
     <meta name="robots" content="index, follow" />
+    <meta name="author" content="Breimer Correa" />
+    <meta name="language" content="en" />
+    <link rel="canonical" href={siteUrl} />
+
+    <!-- Sitemap reference -->
+    <link
+      rel="sitemap"
+      type="application/xml"
+      href={`${siteUrl}/sitemap.xml`}
+    />
 
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={siteUrl} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Brever.link" />
+    <meta property="og:locale" content="en_US" />
 
     <meta property="og:image" content={image} />
+    <meta property="og:image:secure_url" content={image} />
+    <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={imageAlt} />
 
+    <meta property="article:author" content="Breimer Correa" />
+    <meta property="og:updated_time" content={new Date().toISOString()} />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@_dotBRe" />
+    <meta name="twitter:creator" content="@_dotBRe" />
     <meta name="twitter:title" content={twitterTitle} />
     <meta name="twitter:description" content={twitterDescription} />
     <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <meta name="twitter:domain" content="brever.link" />
+    <meta name="twitter:url" content={siteUrl} />
+
+    <meta name="theme-color" content="#1e293b" />
+    <meta name="application-name" content="Brever.link" />
+    <meta name="apple-mobile-web-app-title" content="Brever.link" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Brever.link",
+        "alternateName": "Brever URL Shortener",
+        "description": "Free URL shortener with automatic QR code generation, click tracking, and analytics. Create custom short links and monitor performance.",
+        "url": "https://brever.link",
+        "sameAs": ["https://github.com/Breimerct/brever.link"],
+        "applicationCategory": ["Utility", "Productivity", "Business"],
+        "operatingSystem": "Web",
+        "browserRequirements": "Modern web browser with JavaScript support",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Breimer Correa",
+          "sameAs": "https://twitter.com/_dotBRe"
+        },
+        "featureList": [
+          "URL Shortening",
+          "QR Code Generation",
+          "Click Analytics",
+          "Custom Short Links",
+          "Link Management",
+          "Search and Pagination",
+          "Dark/Light Mode"
+        ],
+        "screenshot": "https://brever.link/og.webp",
+        "softwareVersion": "1.0.0",
+        "releaseNotes": "Modern URL shortener built with Astro 5, React, and Tailwind CSS",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://brever.link/"
+        }
+      }
+    </script>
 
     <ClientRouter />
   </head>

@@ -6,7 +6,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(request.url);
   const slug = url.pathname.split("/").pop();
 
-  if (!slug || slug === "/") {
+  if (
+    !slug ||
+    slug === "/" ||
+    slug === "favicon.ico" ||
+    slug === "sitemap.xml"
+  ) {
     return next();
   }
 
