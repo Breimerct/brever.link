@@ -13,9 +13,7 @@ export default function LinkList({ links }: Props) {
         role="list"
       >
         {links.map((link) => (
-          <li key={link.id} className="col-span-1">
-            <LinkCard link={link} />
-          </li>
+          <LinkCard link={link} key={link.id} className="col-span-1" />
         ))}
       </ul>
     </section>
