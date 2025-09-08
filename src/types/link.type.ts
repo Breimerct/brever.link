@@ -16,15 +16,6 @@ export type Link = CreateLink & {
   clickCount: number;
 };
 
-export type PaginatedLinks = {
-  links: Link[];
-  totalLinks: number;
-  totalPages: number;
-  currentPage: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-};
-
 export type FilterLinks = {
   search: string;
 };

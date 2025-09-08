@@ -25,8 +25,13 @@ if (!isValidPage) {
   return Astro.redirect(redirectUrl);
 }
 
-const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
-  await getAllPaginatedLinks(+page, 4, search);
+const { data, error } = await getAllPaginatedLinks({
+  page: Number(page),
+  limit: 4,
+  slug: search,
+});
+
+const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } = data;
 ---
 
 <RootLayout>
@@ -74,9 +79,8 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
       <section class="w-full my-8 lg:mt-0">
         <h1 class="text-2xl font-bold mb-4">Your Short Links</h1>
 
-        <FilterLinks client:only="react" transition:persist />
         {
-          !links.length && (
+          !error && !links.length && (
             <>
               <div class="text-center mt-10">
                 <h4 class="text-slate-500 text-3xl font-bold">
@@ -89,8 +93,30 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
         }
 
         {
-          !!links.length && (
+          error && (
+            <div class="text-center mt-10 flex flex-col items-center gap-4">
+              <h4 class="text-red-400/80 text-2xl font-bold">
+                An error occurred while fetching the links.
+                {error && (
+                  <>
+                    <br /> ({error})
+                  </>
+                )}
+              </h4>
+              <a
+                class="mt-4 px-4 py-2 font-bold uppercase bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-200 rounded hover:bg-slate-300 dark:hover:bg-slate-500 transition"
+                href="/"
+              >
+                Reload Page
+              </a>
+            </div>
+          )
+        }
+
+        {
+          !error && !!links.length && (
             <>
+              <FilterLinks client:only="react" transition:persist />
               <LinkList links={links} client:only="react" />
               <Pagination
                 currentPage={currentPage}
@@ -120,7 +146,7 @@ const { links, currentPage, totalPages, hasNextPage, hasPreviousPage } =
       "h-1",
       "bg-slate-700",
       "z-50",
-      "dark:bg-slate-500",
+      "dark:bg-slate-500"
     );
     loader.style.animation = "loading 1.5s infinite ease-in-out";
 

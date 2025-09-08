@@ -20,9 +20,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   if (slug) {
-    const { data: link, success } = await getLinkBySlug(slug);
+    const { data: link, error } = await getLinkBySlug(slug);
 
-    if (!link || !success) {
+    if (error || !link) {
       return redirect("/");
     }
 
