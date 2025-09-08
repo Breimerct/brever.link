@@ -110,9 +110,9 @@ export default function LinkCard({ link, className, ...props }: Props) {
             src={link.qrCode}
             alt={`QR code for ${link.shortLink}`}
             data-testid="qr-code-image"
-            className="w-16 h-16 rounded-md"
+            className="w-16 h-16 rounded-sm"
           />
-          <figcaption className="text-sm text-gray-500 dark:text-gray-400">
+          <figcaption className="text-sm text-slate-700 dark:text-slate-200">
             <span className="font-semibold">QR Code</span>
             <Button
               id={`download-qr-${link.slug}`}
@@ -130,7 +130,7 @@ export default function LinkCard({ link, className, ...props }: Props) {
         </figure>
       )}
 
-      <footer className="flex items-center justify-between gap-2 text-gray-500">
+      <footer className="flex items-center justify-between gap-2 text-slate-700 dark:text-slate-200 font-semibold mt-2">
         <small data-testid="creation-date">
           <time dateTime={isoDate}>{formattedDate}</time>
         </small>
