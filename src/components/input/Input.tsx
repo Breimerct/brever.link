@@ -37,7 +37,7 @@ const Input: FC<Props> = ({
           </span>
         )}
         <input
-          {...register(name || "")}
+          {...register(name)}
           name={name}
           id={inputId}
           list={listId}

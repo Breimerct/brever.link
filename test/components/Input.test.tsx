@@ -8,7 +8,17 @@ vi.mock("../../src/helpers/utils", () => ({
   cn: (...classes: (string | undefined | null | boolean | object)[]) => {
     return classes
       .filter(Boolean)
-      .map((cls) => (typeof cls === "string" ? cls : ""))
+      .map((cls) => {
+        if (typeof cls === "string") return cls;
+        if (typeof cls === "object" && cls !== null) {
+          // Handle conditional classes object
+          return Object.entries(cls)
+            .filter(([, condition]) => condition)
+            .map(([className]) => className)
+            .join(" ");
+        }
+        return "";
+      })
       .join(" ");
   },
 }));
@@ -104,6 +114,29 @@ describe("Input Component", () => {
       expect(input).toBeRequired();
       expect(screen.getByText("*")).toBeInTheDocument();
       expect(screen.getByText("Required Field")).toBeInTheDocument();
+    });
+
+    it("should not show asterisk when not required", () => {
+      render(
+        <FormWrapper>
+          <Input name="test" label="Optional Field" />
+        </FormWrapper>,
+      );
+
+      expect(screen.getByText("Optional Field")).toBeInTheDocument();
+      expect(screen.queryByText("*")).not.toBeInTheDocument();
+    });
+
+    it("should render asterisk with red color for required fields", () => {
+      render(
+        <FormWrapper>
+          <Input name="test" label="Required Field" required />
+        </FormWrapper>,
+      );
+
+      const asterisk = screen.getByText("*");
+      expect(asterisk).toBeInTheDocument();
+      expect(asterisk).toHaveClass("text-red-500");
     });
 
     it("should apply disabled state", () => {
@@ -273,6 +306,55 @@ describe("Input Component", () => {
 
       expect(screen.getByText("This field is required")).toBeInTheDocument();
     });
+
+    it("should show fallback error message when error toString returns empty", () => {
+      const FormWithSpecialError = () => {
+        const methods = useForm();
+
+        // Create an error object with a message that has a toString method returning empty string
+        const errorWithEmptyToString = {
+          toString: () => "",
+        };
+
+        methods.setError("test", {
+          message: errorWithEmptyToString as unknown as string,
+        });
+
+        return (
+          <FormProvider {...methods}>
+            <form>
+              <Input name="test" />
+            </form>
+          </FormProvider>
+        );
+      };
+
+      render(<FormWithSpecialError />);
+
+      expect(screen.getByText("This field is required")).toBeInTheDocument();
+    });
+
+    it("should apply error styling when there is an error", () => {
+      const FormWithErrors = () => {
+        const methods = useForm();
+        methods.setError("test", { message: "Error message" });
+
+        return (
+          <FormProvider {...methods}>
+            <form>
+              <Input name="test" />
+            </form>
+          </FormProvider>
+        );
+      };
+
+      render(<FormWithErrors />);
+
+      const input = screen.getByDisplayValue("");
+      // Since cn is mocked, we need to check differently
+      // The mock should join the classes including the error class
+      expect(input.className).toContain("!outline-red-500");
+    });
   });
 
   describe("Accessibility", () => {
@@ -329,6 +411,19 @@ describe("Input Component", () => {
       );
 
       expect(screen.getByText(longLabel)).toBeInTheDocument();
+    });
+
+    it("should handle input without label", () => {
+      render(
+        <FormWrapper>
+          <Input name="test" />
+        </FormWrapper>,
+      );
+
+      const input = screen.getByDisplayValue("");
+      expect(input).toBeInTheDocument();
+      // Should not have any label text
+      expect(screen.queryByText("*")).not.toBeInTheDocument();
     });
   });
 });
