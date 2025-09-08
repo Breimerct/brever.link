@@ -106,6 +106,10 @@ Notes on remote DB:
 - `pnpm preview` — Serves the build locally.
 - `pnpm astro` — Direct access to Astro CLI.
 - `pnpm lint` — Formats with Prettier.
+- `pnpm lint:check` — Checks code formatting without making changes.
+- `pnpm lint:eslint` — Runs ESLint linting checks.
+- `pnpm lint:eslint:fix` — Runs ESLint with automatic fixes.
+- `pnpm lint:fix` — Formats with Prettier and runs ESLint with fixes.
 - `pnpm push:db` — `astro db push --remote`.
 - `pnpm test` — Runs tests in watch mode.
 - `pnpm test:run` — Runs all tests once.
@@ -153,6 +157,45 @@ pnpm test:ui
 ```
 
 For detailed testing documentation, see [TEST_README.md](./TEST_README.md).
+
+## Code Quality & Git Hooks
+
+This project uses **Husky** to enforce code quality standards through Git hooks:
+
+### Pre-commit Hook
+
+Automatically runs before each commit to ensure code quality:
+
+- **Code Formatting**: Runs Prettier to fix formatting issues (`pnpm lint:fix`)
+- **Format Check**: Verifies code formatting is consistent (`pnpm lint:check`)
+- **ESLint**: Performs linting checks on TypeScript, JSX, and Astro files (`pnpm lint:eslint`)
+
+### Commit Message Hook
+
+Validates commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) format:
+
+- Uses **commitlint** with `@commitlint/config-conventional`
+- Enforces structured commit messages for better project history
+- See [COMMIT_CONVENTIONS.md](./COMMIT_CONVENTIONS.md) for detailed rules
+
+### Quality Standards
+
+- **ESLint Configuration**: Custom rules for TypeScript, React, and Astro files
+- **Prettier**: Consistent code formatting across the project
+- **TypeScript**: Strict type checking with custom rules
+- **Testing**: Comprehensive test suite with 242 tests across 15 files
+
+### Bypassing Hooks (Emergency Only)
+
+```powershell
+# Skip pre-commit hook (not recommended)
+git commit --no-verify -m "emergency fix"
+
+# Skip commit-msg validation (not recommended)
+git commit --no-verify -m "fix: emergency commit"
+```
+
+## Deployment
 
 - Adapter: `@astrojs/netlify`.
 - Define necessary variables/credentials for your remote DB in Netlify if you use them. Then build and publish with Netlify commands (build: `pnpm build`).

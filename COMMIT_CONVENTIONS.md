@@ -51,7 +51,7 @@ docs(api): update endpoint documentation
 
 - The type must be lowercase
 - The subject should not end with a period
-- The header should not exceed 72 characters
+- The header should not exceed 80 characters
 - The body and footer should not exceed 100 characters per line
 - There must be a blank line between the header and the body
 - There must be a blank line between the body and the footer
@@ -60,9 +60,9 @@ docs(api): update endpoint documentation
 
 ### Pre-commit
 
-- Checks code formatting with Prettier
+- Fixes code formatting with Prettier
+- Checks code formatting consistency
 - Runs linting with ESLint
-- Runs all tests
 
 ### Commit-msg
 
@@ -75,10 +75,13 @@ docs(api): update endpoint documentation
 pnpm lint:check
 
 # Fix formatting automatically
-pnpm lint
+pnpm lint:fix
 
 # Run linting
 pnpm lint:eslint
+
+# Fix linting issues automatically
+pnpm lint:eslint:fix
 
 # Run tests
 pnpm test:run
