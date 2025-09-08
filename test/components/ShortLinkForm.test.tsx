@@ -385,6 +385,35 @@ describe("ShortLinkForm", () => {
       consoleError.mockRestore();
     });
 
+    it("should show fallback error message when error has no message", async () => {
+      const consoleError = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      // Mock an error without a message property
+      (actions.shortenAction.shortenLink as any).mockRejectedValue(new Error());
+
+      render(<ShortLinkForm />);
+
+      const urlInput = screen.getByTestId("url-input");
+      const slugInput = screen.getByTestId("slug-input");
+      const submitButton = screen.getByTestId("short-link-form-submit");
+
+      await user.type(urlInput, "https://example.com");
+      await user.type(slugInput, "test-slug");
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith("Something went wrong", {
+          description: "Please check the data and try again.",
+        });
+      });
+
+      expect(navigate).not.toHaveBeenCalled();
+
+      consoleError.mockRestore();
+    });
+
     it("should handle multiple rapid randomize clicks", async () => {
       render(<ShortLinkForm />);
 
