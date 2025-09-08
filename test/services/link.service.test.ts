@@ -37,6 +37,7 @@ import {
   getAllPaginatedLinks,
 } from "../../src/services/link.service";
 import { db, LinkTable, eq, like, desc } from "astro:db";
+import type { Link, PaginatedLinkResponse, ServiceResponse } from "@/types";
 
 describe("Link Service", () => {
   beforeEach(() => {
@@ -152,11 +153,12 @@ describe("Link Service", () => {
 
       const result = await getLinkBySlug("test-slug");
 
-      expect(result).toEqual({
-        success: true,
-        data: mockLink,
+      const expectResult: ServiceResponse<Link | null> = {
         error: null,
-      });
+        data: mockLink,
+      };
+
+      expect(result).toEqual(expectResult);
     });
 
     it("should return success with undefined data when link does not exist", async () => {
@@ -170,11 +172,8 @@ describe("Link Service", () => {
 
       const result = await getLinkBySlug("non-existent-slug");
 
-      expect(result).toEqual({
-        success: true,
-        data: undefined,
-        error: null,
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toBeNull();
     });
 
     it("should return error when database error occurs", async () => {
@@ -188,11 +187,8 @@ describe("Link Service", () => {
 
       const result = await getLinkBySlug("test-slug");
 
-      expect(result).toEqual({
-        success: false,
-        error: "Failed to retrieve link",
-        data: null,
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toEqual("Failed to retrieve link");
     });
   });
 
@@ -229,11 +225,8 @@ describe("Link Service", () => {
 
       const result = await incrementClickCount("test-slug");
 
-      expect(result).toEqual({
-        success: true,
-        data: updatedLink,
-        error: null,
-      });
+      expect(result.data).toEqual(updatedLink);
+      expect(result.error).toBeNull();
     });
 
     it("should return error when link not found", async () => {
@@ -247,11 +240,8 @@ describe("Link Service", () => {
 
       const result = await incrementClickCount("non-existent-slug");
 
-      expect(result).toEqual({
-        success: false,
-        error: "Link not found",
-        data: null,
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toEqual("Link not found");
     });
 
     it("should return error when update fails", async () => {
@@ -281,11 +271,8 @@ describe("Link Service", () => {
 
       const result = await incrementClickCount("test-slug");
 
-      expect(result).toEqual({
-        success: false,
-        error: "Failed to update click count",
-        data: null,
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toEqual("Failed to update click count");
     });
 
     it("should handle database errors gracefully", async () => {
@@ -315,11 +302,12 @@ describe("Link Service", () => {
 
       const result = await incrementClickCount("test-slug");
 
-      expect(result).toEqual({
-        success: false,
+      const expectResult: ServiceResponse<Link | null> = {
         error: "Failed to increment click count",
         data: null,
-      });
+      };
+
+      expect(result).toEqual(expectResult);
     });
   });
 
@@ -340,12 +328,8 @@ describe("Link Service", () => {
 
       const result = await createNewLink(mockCreateLink);
 
-      expect(result).toEqual({
-        success: true,
-        error: null,
-        message: "Link created successfully",
-      });
-
+      expect(result.data).toEqual("Link created successfully");
+      expect(result.error).toBeNull();
       expect(db.insert).toHaveBeenCalledWith(LinkTable);
     });
 
@@ -358,10 +342,8 @@ describe("Link Service", () => {
 
       const result = await createNewLink(mockCreateLink);
 
-      expect(result).toEqual({
-        success: false,
-        error: "Insert failed",
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toEqual("Insert failed");
     });
 
     it("should handle database errors gracefully", async () => {
@@ -373,10 +355,8 @@ describe("Link Service", () => {
 
       const result = await createNewLink(mockCreateLink);
 
-      expect(result).toEqual({
-        success: false,
-        error: "Failed to create link",
-      });
+      expect(result.data).toBeNull();
+      expect(result.error).toEqual("Failed to create link");
     });
 
     it("should generate UUID and set creation date", async () => {
@@ -417,7 +397,8 @@ describe("Link Service", () => {
 
       const result = await getAllLinks();
 
-      expect(result).toEqual(mockLinks);
+      expect(result.error).toEqual(null);
+      expect(result.data).toEqual(mockLinks);
       expect(desc).toHaveBeenCalledWith(LinkTable.createdAt);
     });
 
@@ -432,7 +413,8 @@ describe("Link Service", () => {
 
       const result = await getAllLinks();
 
-      expect(result).toEqual([]);
+      expect(result.error).toBe("Failed to retrieve links");
+      expect(result.data).toEqual([]);
     });
   });
 
@@ -440,7 +422,7 @@ describe("Link Service", () => {
     const mockLinks = [
       { id: "1", slug: "test-1" },
       { id: "2", slug: "test-2" },
-    ];
+    ] as Link[];
 
     it("should return paginated links with correct metadata", async () => {
       const mockLimit = vi.fn().mockReturnValue({
@@ -471,16 +453,25 @@ describe("Link Service", () => {
         }),
       });
 
-      const result = await getAllPaginatedLinks(1, 5, "test");
-
-      expect(result).toEqual({
-        links: mockLinks,
-        totalLinks: 10,
-        totalPages: 2,
-        currentPage: 1,
-        hasNextPage: true,
-        hasPreviousPage: false,
+      const result = await getAllPaginatedLinks({
+        page: 1,
+        limit: 5,
+        slug: "test",
       });
+
+      const expectResult: ServiceResponse<PaginatedLinkResponse> = {
+        data: {
+          links: mockLinks,
+          totalLinks: 10,
+          totalPages: 2,
+          currentPage: 1,
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+        error: null,
+      };
+
+      expect(result).toEqual(expectResult);
 
       expect(mockLimit).toHaveBeenCalledWith(5);
       expect(like).toHaveBeenCalledWith(LinkTable.slug, "%test%");
@@ -515,9 +506,10 @@ describe("Link Service", () => {
         }),
       });
 
-      const result = await getAllPaginatedLinks(2, 3);
+      const result = await getAllPaginatedLinks({ page: 2, limit: 3 });
+      const { currentPage } = result.data;
 
-      expect(result.currentPage).toBe(2);
+      expect(currentPage).toBe(2);
       expect(like).toHaveBeenCalledWith(LinkTable.slug, "%%");
     });
 
@@ -544,16 +536,20 @@ describe("Link Service", () => {
         }),
       });
 
-      const result = await getAllPaginatedLinks(2, 3);
+      const result = await getAllPaginatedLinks({ page: 2, limit: 3 });
+      const expectResult: ServiceResponse<PaginatedLinkResponse> = {
+        data: {
+          links: mockLinks,
+          totalLinks: 7,
+          totalPages: 3,
+          currentPage: 2,
+          hasNextPage: true,
+          hasPreviousPage: true,
+        },
+        error: null,
+      };
 
-      expect(result).toEqual({
-        links: mockLinks,
-        totalLinks: 7,
-        totalPages: 3,
-        currentPage: 2,
-        hasNextPage: true,
-        hasPreviousPage: true,
-      });
+      expect(result).toEqual(expectResult);
     });
 
     it("should return default values when database error occurs", async () => {
@@ -573,16 +569,21 @@ describe("Link Service", () => {
         }),
       });
 
-      const result = await getAllPaginatedLinks(1, 5);
+      const result = await getAllPaginatedLinks({ page: 1, limit: 5 });
 
-      expect(result).toEqual({
-        links: [],
-        totalLinks: 0,
-        totalPages: 0,
-        currentPage: 1,
-        hasNextPage: false,
-        hasPreviousPage: false,
-      });
+      const expectResult: ServiceResponse<PaginatedLinkResponse> = {
+        data: {
+          links: [],
+          totalLinks: 0,
+          totalPages: 0,
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+        error: "Failed to retrieve links",
+      };
+
+      expect(result).toEqual(expectResult);
     });
   });
 });

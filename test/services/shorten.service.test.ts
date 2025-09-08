@@ -47,9 +47,8 @@ describe("shorLink Service", () => {
 
     mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);
     mockCreateNewLink.mockResolvedValue({
-      success: true,
       error: null,
-      message: "Link created successfully",
+      data: "Link created successfully",
     });
 
     const result = await shorLink(inputData, mockContext);
@@ -95,7 +94,7 @@ describe("shorLink Service", () => {
 
     mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);
     mockCreateNewLink.mockResolvedValue({
-      success: false,
+      data: null,
       error: "Database error",
     });
 

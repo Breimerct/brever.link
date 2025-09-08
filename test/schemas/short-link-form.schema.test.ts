@@ -130,10 +130,10 @@ describe("shortLinkFormSchema", () => {
     });
   });
 
-  it("rejects slug longer than 10 characters", () => {
+  it("rejects slug longer than 30 characters", () => {
     const invalidData = {
       url: "https://example.com",
-      slug: "this-is-too-long-slug",
+      slug: "this-is-too-long-slug-that-exceeds-thirty-characters",
     };
 
     const result = shortLinkFormSchema.safeParse(invalidData);
@@ -141,11 +141,11 @@ describe("shortLinkFormSchema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       const lengthIssue = result.error.issues.find(
-        (issue) => issue.message === "Slug must be at most 10 characters long",
+        (issue) => issue.message === "Slug must be at most 30 characters long",
       );
       expect(lengthIssue?.path).toEqual(["slug"]);
       expect(lengthIssue?.message).toBe(
-        "Slug must be at most 10 characters long",
+        "Slug must be at most 30 characters long",
       );
     }
   });
