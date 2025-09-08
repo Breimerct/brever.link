@@ -59,9 +59,13 @@ describe("shortLinkFormSchema", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues).toHaveLength(1);
-      expect(result.error.issues[0].path).toEqual(["slug"]);
-      expect(result.error.issues[0].message).toBe("Slug is required");
+      // Empty slug triggers both min length and regex validation
+      expect(result.error.issues).toHaveLength(2);
+      const slugRequiredIssue = result.error.issues.find(
+        (issue) => issue.message === "Slug is required",
+      );
+      expect(slugRequiredIssue?.path).toEqual(["slug"]);
+      expect(slugRequiredIssue?.message).toBe("Slug is required");
     }
   });
 
@@ -107,12 +111,12 @@ describe("shortLinkFormSchema", () => {
 
   it("accepts various valid slug formats", () => {
     const validSlugs = [
-      "simple-slug",
-      "slug_with_underscores",
-      "UPPERCASE-SLUG",
+      "short-slug",
+      "slug_under",
+      "UPPERCASE",
       "slug123",
       "a",
-      "very-long-slug-with-many-characters",
+      "mix-ALL_9",
     ];
 
     validSlugs.forEach((slug) => {
@@ -124,5 +128,47 @@ describe("shortLinkFormSchema", () => {
         expect(result.data.slug).toBe(slug);
       }
     });
+  });
+
+  it("rejects slug longer than 10 characters", () => {
+    const invalidData = {
+      url: "https://example.com",
+      slug: "this-is-too-long-slug",
+    };
+
+    const result = shortLinkFormSchema.safeParse(invalidData);
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const lengthIssue = result.error.issues.find(
+        (issue) => issue.message === "Slug must be at most 10 characters long",
+      );
+      expect(lengthIssue?.path).toEqual(["slug"]);
+      expect(lengthIssue?.message).toBe(
+        "Slug must be at most 10 characters long",
+      );
+    }
+  });
+
+  it("rejects slug with invalid characters", () => {
+    const invalidData = {
+      url: "https://example.com",
+      slug: "invalid slug", // Contains space
+    };
+
+    const result = shortLinkFormSchema.safeParse(invalidData);
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const regexIssue = result.error.issues.find(
+        (issue) =>
+          issue.message ===
+          "No spaces allowed - separate words with hyphens (-) or underscores (_).",
+      );
+      expect(regexIssue?.path).toEqual(["slug"]);
+      expect(regexIssue?.message).toBe(
+        "No spaces allowed - separate words with hyphens (-) or underscores (_).",
+      );
+    }
   });
 });

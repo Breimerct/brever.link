@@ -172,14 +172,23 @@ describe("ShortLinkForm", () => {
       const submitButton = screen.getByTestId("short-link-form-submit");
 
       await user.type(urlInput, "https://example.com");
-      await user.type(slugInput, "existing-slug");
+      await user.type(slugInput, "valid-slug");
+
+      // Wait for form validation to complete
+      await waitFor(() => {
+        expect(submitButton).not.toBeDisabled();
+      });
+
       await user.click(submitButton);
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith("Slug already exists", {
-          description: "Please check the data and try again.",
-        });
-      });
+      await waitFor(
+        () => {
+          expect(toast.error).toHaveBeenCalledWith("Slug already exists", {
+            description: "Please check the data and try again.",
+          });
+        },
+        { timeout: 3000 },
+      );
 
       expect(navigate).not.toHaveBeenCalled();
     });
@@ -289,10 +298,11 @@ describe("ShortLinkForm", () => {
       const slugInput = screen.getByTestId("slug-input");
       const randomizeButton = screen.getByTestId("randomize-slug-button");
 
-      expect(urlInput).toHaveAccessibleName("URL");
+      // The accessible name includes the required asterisk
+      expect(urlInput).toHaveAccessibleName("URL *");
       expect(urlInput).toHaveAttribute("aria-required", "true");
 
-      expect(slugInput).toHaveAccessibleName("Slug");
+      expect(slugInput).toHaveAccessibleName("Slug *");
 
       expect(randomizeButton).toHaveAttribute(
         "aria-label",

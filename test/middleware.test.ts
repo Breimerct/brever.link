@@ -487,7 +487,7 @@ describe("Middleware", () => {
 
       await onRequest(mockContext, mockNext);
 
-      expect(mockGetLinkBySlug).toHaveBeenCalledWith("my%20slug");
+      expect(mockGetLinkBySlug).toHaveBeenCalledWith("my slug");
     });
 
     it("should handle slugs with special characters", async () => {

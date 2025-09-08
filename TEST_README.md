@@ -4,7 +4,7 @@ This project uses **Vitest** as the main testing framework, following best pract
 
 ## 📊 General Status
 
-**Current status:** ✅ 244 tests passing across 15 test files
+**Current status:** ✅ 246 tests passing across 15 test files
 
 The project maintains complete test coverage including React components, business services, schema validation, middleware, URL validation, and utility functions.
 
@@ -58,7 +58,7 @@ test/
 Complete coverage of the user interface including:
 
 - **Form Components**: ShortLinkForm (21 tests), FilterLinks (27 tests), Input (19 tests)
-- **Display Components**: LinkCard (20 tests), LinkList (20 tests), Button (8 tests), Toaster (5 tests)
+- **Display Components**: LinkCard (20 tests), LinkList (20 tests), Button (9 tests), Toaster (5 tests)
 - **Rendering and props**: Basic rendering, custom props, conditional rendering
 - **User interactions**: Form submission, input handling, button clicks, copy functionality
 - **Form validation**: Real-time validation, error display, field validation
@@ -80,7 +80,7 @@ Testing of the main application logic:
 Complete testing of Zod validation schemas:
 
 - **Short Link Action Schema** (13 tests): Server action validation
-- **Short Link Form Schema** (7 tests): Client form validation
+- **Short Link Form Schema** (9 tests): Client form validation with enhanced slug validation
 - **Filter Links Schema** (7 tests): Search and filter validation
 - Valid and invalid input cases
 - Type safety and error messages
@@ -316,13 +316,13 @@ pnpm test --reporter=verbose --run
 
 ### Current Test Distribution
 
-- **React Components:** 42% (100 tests) - UI components and user interactions
+- **React Components:** 42% (102 tests) - UI components and user interactions
 - **URL Validation:** 12% (29 tests) - Security-focused URL validation
 - **Middleware:** 10% (24 tests) - Routing and redirection logic
-- **Schemas:** 11% (27 tests) - Data validation and type safety
-- **Services:** 10% (24 tests) - Business logic and database operations
+- **Schemas:** 12% (29 tests) - Data validation and type safety
+- **Services:** 10% (25 tests) - Business logic and database operations
 - **Utilities:** 7% (18 tests) - Helper functions and tools
-- **Infrastructure:** 8% (20 tests) - Supporting components and mocks
+- **Infrastructure:** 7% (19 tests) - Supporting components and mocks
 
 ### Test Coverage by Category
 
@@ -342,12 +342,13 @@ pnpm test --reporter=verbose --run
 
 ---
 
-**Last updated:** September 7, 2025  
+**Last updated:** September 8, 2025  
 **Maintained by:** BRé [breimerct@gmail.com](mailto:breimerct@gmail.com)
 
 ### Recent Updates
 
-- ✅ **September 7, 2025**: Added comprehensive URL validation testing (29 tests)
-- ✅ **Security Enhancement**: Implemented HTTPS-only validation with private IP blocking
-- ✅ **Test Coverage**: Updated to 242 tests across 15 test files
-- ✅ **Documentation**: Enhanced testing documentation with security focus
+- ✅ **September 8, 2025**: Fixed failing tests after code changes
+- ✅ **Enhanced Schema Validation**: Added comprehensive slug validation tests (10 characters max, alphanumeric + hyphens/underscores)
+- ✅ **Form Accessibility**: Updated accessibility tests to match actual component behavior (labels include required asterisks)
+- ✅ **Test Coverage**: Updated to 246 tests across 15 test files
+- ✅ **Error Handling**: Improved error handling tests in ShortLinkForm component

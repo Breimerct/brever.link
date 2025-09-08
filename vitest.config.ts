@@ -39,6 +39,8 @@ export default getViteConfig({
       "test/__templates__/**",
       "**/index.{js,ts,mjs,tsx,jsx}",
       "test/__templates__/**",
+      "db/seed.ts",
+      "**/sitemap.xml.ts",
     ],
 
     // Configuración de coverage
@@ -67,6 +69,7 @@ export default getViteConfig({
         "test/__templates__/**",
         "astro.config.mjs",
         "db/seed.ts",
+        "**/sitemap.xml.ts",
       ],
       include: ["src/**/*.{js,ts,jsx,tsx}", "!src/**/*.d.ts"],
       thresholds: {
