@@ -17,7 +17,6 @@ const {
   urlPattern = "/?page=",
 } = Astro.props;
 
-// Pagination logic (unchanged)
 const MAX_VISIBLE_PAGES = 6;
 const DOTS_THRESHOLD = 3;
 const RANGE_PADDING = 1;
@@ -25,8 +24,6 @@ const MIN_RANGE_START = 2;
 const END_MARGIN = 2;
 
 const getPageNumbers = () => {
-  // Same logic as before
-  // ...
   const pageNumbers: { type: "page" | "dots"; number: number }[] = [];
 
   if (totalPages <= MAX_VISIBLE_PAGES) {
@@ -145,7 +142,7 @@ const pageNumbers = getPageNumbers();
                 "flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white",
                 pageNumber === currentPage
                   ? "z-10 text-gray-800 font-semibold bg-gray-200 border-slate-300 cursor-default dark:bg-gray-700 dark:text-white"
-                  : "text-gray-500 bg-white dark:bg-gray-800",
+                  : "text-gray-500 bg-white dark:bg-gray-800"
               )}
               aria-label={`Go to page ${pageNumber}`}
             >

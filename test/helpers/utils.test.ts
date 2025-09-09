@@ -105,13 +105,4 @@ describe("Utils - formatDate function", () => {
 
     expect(formatted).toMatch(/30 Jun - 2024, \d{2}:\d{2} [AP]M/);
   });
-
-  //   TODO: Fix this test
-  //   it("handles edge case dates", () => {
-  //     const newYear = formatDate("2024-01-01T00:00:00Z");
-  //     const newYearEve = formatDate("2023-12-31T23:59:59Z");
-
-  //     expect(newYear).toContain(/01 Jan - 2024/);
-  //     expect(newYearEve).toContain(/31 Dec - 2023/);
-  //   });
 });

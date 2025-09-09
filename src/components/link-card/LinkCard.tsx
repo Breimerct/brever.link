@@ -27,12 +27,20 @@ export default function LinkCard({ link, className, ...props }: Props) {
   };
 
   const handleDownloadQrImg = () => {
-    const linkElement = document.createElement("a");
-    linkElement.href = link.qrCode!;
-    linkElement.download = `${link.slug}.png`;
-    document.body.appendChild(linkElement);
-    linkElement.click();
-    document.body.removeChild(linkElement);
+    if (!link.qrCode) return;
+
+    try {
+      const linkElement = document.createElement("a");
+      linkElement.href = link.qrCode;
+      linkElement.download = `${link.slug}.png`;
+      document.body.appendChild(linkElement);
+      linkElement.click();
+      document.body.removeChild(linkElement);
+    } catch {
+      toast.error("Failed to download QR code!", {
+        description: "Please try again.",
+      });
+    }
   };
 
   const formattedDate = formatDate(link.createdAt);

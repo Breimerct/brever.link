@@ -11,7 +11,6 @@ vi.mock("../../src/helpers/utils", () => ({
       .map((cls) => {
         if (typeof cls === "string") return cls;
         if (typeof cls === "object" && cls !== null) {
-          // Handle conditional classes object
           return Object.entries(cls)
             .filter(([, condition]) => condition)
             .map(([className]) => className)
@@ -310,8 +309,6 @@ describe("Input Component", () => {
     it("should show fallback error message when error toString returns empty", () => {
       const FormWithSpecialError = () => {
         const methods = useForm();
-
-        // Create an error object with a message that has a toString method returning empty string
         const errorWithEmptyToString = {
           toString: () => "",
         };
@@ -351,8 +348,7 @@ describe("Input Component", () => {
       render(<FormWithErrors />);
 
       const input = screen.getByDisplayValue("");
-      // Since cn is mocked, we need to check differently
-      // The mock should join the classes including the error class
+
       expect(input.className).toContain("!outline-red-500");
     });
   });
@@ -421,8 +417,8 @@ describe("Input Component", () => {
       );
 
       const input = screen.getByDisplayValue("");
+
       expect(input).toBeInTheDocument();
-      // Should not have any label text
       expect(screen.queryByText("*")).not.toBeInTheDocument();
     });
   });

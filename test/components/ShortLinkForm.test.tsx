@@ -173,8 +173,6 @@ describe("ShortLinkForm", () => {
 
       await user.type(urlInput, "https://example.com");
       await user.type(slugInput, "valid-slug");
-
-      // Wait for form validation to complete
       await waitFor(() => {
         expect(submitButton).not.toBeDisabled();
       });
@@ -298,12 +296,9 @@ describe("ShortLinkForm", () => {
       const slugInput = screen.getByTestId("slug-input");
       const randomizeButton = screen.getByTestId("randomize-slug-button");
 
-      // The accessible name includes the required asterisk
       expect(urlInput).toHaveAccessibleName("URL *");
       expect(urlInput).toHaveAttribute("aria-required", "true");
-
       expect(slugInput).toHaveAccessibleName("Slug *");
-
       expect(randomizeButton).toHaveAttribute(
         "aria-label",
         "Generate random slug",
@@ -390,7 +385,6 @@ describe("ShortLinkForm", () => {
         .spyOn(console, "error")
         .mockImplementation(() => {});
 
-      // Mock an error without a message property
       (actions.shortenAction.shortenLink as any).mockRejectedValue(new Error());
 
       render(<ShortLinkForm />);

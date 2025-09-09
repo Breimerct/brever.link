@@ -59,7 +59,6 @@ describe("shortLinkFormSchema", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      // Empty slug triggers both min length and regex validation
       expect(result.error.issues).toHaveLength(2);
       const slugRequiredIssue = result.error.issues.find(
         (issue) => issue.message === "Slug is required",
@@ -153,7 +152,7 @@ describe("shortLinkFormSchema", () => {
   it("rejects slug with invalid characters", () => {
     const invalidData = {
       url: "https://example.com",
-      slug: "invalid slug", // Contains space
+      slug: "invalid slug",
     };
 
     const result = shortLinkFormSchema.safeParse(invalidData);

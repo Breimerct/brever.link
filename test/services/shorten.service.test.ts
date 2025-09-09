@@ -43,8 +43,6 @@ describe("shorLink Service", () => {
     mockContext.request.headers.get.mockReturnValue(
       "https://github.com/some-page",
     );
-
-    // Default mock for validateUrl
     mockValidateUrl.mockReturnValue({
       isValid: true,
       normalizedUrl: "https://github.com",
@@ -152,7 +150,6 @@ describe("shorLink Service", () => {
       slug: "test-slug",
     };
 
-    // Mock validateUrl to return isValid: false but error: undefined
     mockValidateUrl.mockReturnValue({
       isValid: false,
       error: undefined,
@@ -174,7 +171,7 @@ describe("shorLink Service", () => {
     mockVerifyIsExistingLinkBySlug.mockResolvedValue(false);
     mockCreateNewLink.mockResolvedValue({
       data: null,
-      error: null, // No error but also no data
+      error: null,
     });
 
     await expect(shorLink(inputData, mockContext)).rejects.toThrow(ActionError);

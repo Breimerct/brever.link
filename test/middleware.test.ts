@@ -543,7 +543,6 @@ describe("Middleware", () => {
     });
 
     it("should call next() for whitespace-only slugs after decoding", async () => {
-      // Test case where slug contains only encoded whitespace characters
       mockContext.request = new Request("https://example.com/%20%20%20");
 
       const result = await onRequest(mockContext, mockNext);
@@ -554,7 +553,6 @@ describe("Middleware", () => {
     });
 
     it("should handle empty string after URL decoding", async () => {
-      // Mock decodeURIComponent to return empty string
       const originalDecodeURIComponent = global.decodeURIComponent;
       global.decodeURIComponent = vi.fn().mockReturnValue("");
 
@@ -566,7 +564,7 @@ describe("Middleware", () => {
       expect(mockGetLinkBySlug).not.toHaveBeenCalled();
       expect(result).toBe(await mockNext());
 
-      // Restore
+    
       global.decodeURIComponent = originalDecodeURIComponent;
     });
   });
