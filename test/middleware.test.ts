@@ -564,7 +564,6 @@ describe("Middleware", () => {
       expect(mockGetLinkBySlug).not.toHaveBeenCalled();
       expect(result).toBe(await mockNext());
 
-    
       global.decodeURIComponent = originalDecodeURIComponent;
     });
   });
