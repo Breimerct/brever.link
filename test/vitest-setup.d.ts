@@ -7,8 +7,7 @@ import * as matchers from "@testing-library/jest-dom/matchers";
 declare global {
   namespace Vi {
     interface JestAssertion<T>
-      extends jest.Matchers<void, T>,
-        TestingLibraryMatchers<T, void> {}
+      extends jest.Matchers<void, T>, TestingLibraryMatchers<T, void> {}
   }
 }
 
